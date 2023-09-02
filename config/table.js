@@ -173,7 +173,6 @@ const tableInfo = [
       { name: 'sell_price', type: 'VARCHAR(255)' },
       { name: 'item_name', type: 'VARCHAR(255)' },
       { name: 'purchase_price', type: 'VARCHAR(255)' },
-      { name: 'sell_price', type: 'VARCHAR(255)' },
       { name: 'wholesale_price', type: 'VARCHAR(255)' },
       { name: 'discount', type: 'VARCHAR(255)' },
       { name: 'grnqty', type: 'VARCHAR(255)' },
@@ -258,16 +257,6 @@ const tableInfo = [
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
-  {
-    tableName: 'storage',
-    fields: [
-      { name: 'storageid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'storage_size', type: 'VARCHAR(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
 ];
 
 
@@ -279,7 +268,7 @@ async function checkTables() {
 
     const existingTables = await getExistingTables(connection);
     await createNewTables(connection, existingTables);
-    // await removeUnusedTables(connection, existingTables);
+    await removeUnusedTables(connection, existingTables);
 
     connection.release();
     pool.end();
@@ -354,7 +343,7 @@ async function removeFieldsFromTable(connection, tableName, fieldsToRemove) {
 }
 
 // Uncomment and use this function to remove unused tables
-/*
+
 async function removeUnusedTables(connection, existingTables) {
   for (const existingTable of existingTables) {
     const tableExists = tableInfo.some(table => table.tableName === existingTable);
@@ -365,7 +354,7 @@ async function removeUnusedTables(connection, existingTables) {
     }
   }
 }
-*/
+
 
 // Export the necessary functions and tableInfo
 module.exports = { checkTables, tableInfo };
