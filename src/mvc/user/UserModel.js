@@ -25,14 +25,6 @@ const UserModel = {
     connection.query('SELECT * FROM user WHERE phonenumber = ? AND is_delete = 0', [phonenumber], callback);
   },
 
-  getSupplierByPhonenumber(phonenumber, callback) {
-    connection.query('SELECT * FROM supplier WHERE supplier_phone = ? AND is_delete = 0', [phonenumber], callback);
-  },
-
-  getSupplierByEmail(email, callback) {
-    connection.query('SELECT * FROM supplier WHERE supplier_email = ? AND is_delete = 0', [email], callback);
-  },
-
   getUserByUsername(username, callback) {
     connection.query('SELECT * FROM user WHERE username = ? AND is_delete = 0', [username], callback);
   },

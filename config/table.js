@@ -36,39 +36,7 @@ const tableInfo = [
       { name: 'logo', type: 'VARCHAR(255)' },
     ],
   },
-  {
-    tableName: 'supplier',
-    fields: [
-      { name: 'supplier_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'supplier_name', type: 'VARCHAR(255)' },
-      { name: 'supplier_address', type: 'VARCHAR(255)' },
-      { name: 'supplier_email', type: 'VARCHAR(255)' },
-      { name: 'supplier_phone', type: 'VARCHAR(10)' },
-      { name: 'supplier_adddate', type: 'DATETIME' },
-      { name: 'supplier_status', type: 'INT(5)' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
-  {
-    tableName: 'item',
-    fields: [
-      { name: 'itemid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'item_code', type: 'VARCHAR(255)' },
-      { name: 'item_name', type: 'VARCHAR(255)' },
-      { name: 'item_description', type: 'VARCHAR(255)' },
-      { name: 'catid', type: 'INT(255)' },
-      { name: 'subcatid', type: 'INT(255)' },
-      { name: 'storageid', type: 'INT(255)' },
-      { name: 'sale_warranty', type: 'VARCHAR(15)' },
-      { name: 'condition_type', type: 'VARCHAR(15)' },
-      { name: 'brandid', type: 'INT(255)' },
-      { name: 'serial_status', type: 'INT(5)' },
-      { name: 'item_image', type: 'VARCHAR(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
+
   {
     tableName: 'category',
     fields: [
@@ -79,17 +47,7 @@ const tableInfo = [
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
-  {
-    tableName: 'subcategory',
-    fields: [
-      { name: 'subcatid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'subcat_name', type: 'VARCHAR(255)' },
-      { name: 'catid', type: 'INT(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
+
   {
     tableName: 'branch',
     fields: [
@@ -111,26 +69,7 @@ const tableInfo = [
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
-  {
-    tableName: 'colors',
-    fields: [
-      { name: 'colorid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'colorname', type: 'VARCHAR(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
-  {
-    tableName: 'brands',
-    fields: [
-      { name: 'brandid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'brandname', type: 'VARCHAR(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
+
   {
     tableName: 'permission',
     fields: [
@@ -152,64 +91,7 @@ const tableInfo = [
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
-  {
-    tableName: 'grn',
-    fields: [
-      { name: 'grnno', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'supplier_id', type: 'INT(255)' },
-      { name: 'reference_number', type: 'VARCHAR(255)' },
-      { name: 'branch_id', type: 'INT(255)' },
-      { name: 'user_id', type: 'INT(255)' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
-  {
-    tableName: 'grn_temp',
-    fields: [
-      { name: 'grntempid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'itemid', type: 'INT(255)' },
-      { name: 'sell_price', type: 'VARCHAR(255)' },
-      { name: 'item_name', type: 'VARCHAR(255)' },
-      { name: 'purchase_price', type: 'VARCHAR(255)' },
-      { name: 'sell_price', type: 'VARCHAR(255)' },
-      { name: 'wholesale_price', type: 'VARCHAR(255)' },
-      { name: 'discount', type: 'VARCHAR(255)' },
-      { name: 'grnqty', type: 'VARCHAR(255)' },
-      { name: 'grnno', type: 'INT(255)' },
-      { name: 'branch_id', type: 'INT(255)' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
-  {
-    tableName: 'item_price',
-    fields: [
-      { name: 'item_priceid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'itemid', type: 'INT(255)' },
-      { name: 'sell_price', type: 'FLOAT(10, 2)' },
-      { name: 'purchase_price', type: 'FLOAT(10, 2)' },
-      { name: 'wholesale_price', type: 'FLOAT(10, 2)' },
-      { name: 'discount', type: 'FLOAT(10, 2)' },
-      { name: 'branch_id', type: 'INT(255)' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
-  {
-    tableName: 'stock',
-    fields: [
-      { name: 'stockid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'itemid', type: 'INT(255)' },
-      { name: 'qty', type: 'INT(255)' },
-      { name: 'branch_id', type: 'INT(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
+
   {
     tableName: 'customer',
     fields: [
@@ -222,52 +104,7 @@ const tableInfo = [
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
-  {
-    tableName: 'grnpayment',
-    fields: [
-      { name: 'grnpayment_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'grnno', type: 'INT(255)' },
-      { name: 'total_amount', type: 'FLOAT' },
-      { name: 'resiptNo', type: 'VARCHAR(255)' },
-      { name: 'payment_status', type: 'INT(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
-  {
-    tableName: 'itemdetails',
-    fields: [
-      { name: 'itemdetails_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'grnno', type: 'INT(255)' },
-      { name: 'sirial_no', type: 'VARCHAR(255)' },
-      { name: 'emi_number', type: 'VARCHAR(255)' },
-      { name: 'colorid', type: 'INT(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
-  {
-    tableName: 'temp_itemdetails',
-    fields: [
-      { name: 'temp_itemdetails_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'grntempid', type: 'INT(255)' },
-      { name: 'serial_no', type: 'VARCHAR(255)' },
-      { name: 'emi_number', type: 'VARCHAR(255)' },
-      { name: 'colorid', type: 'INT(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
-  {
-    tableName: 'storage',
-    fields: [
-      { name: 'storageid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'storage_size', type: 'VARCHAR(255)' },
-      { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
-      { name: 'is_delete', type: 'INT(5)' },
-    ],
-  },
+  
 ];
 
 
