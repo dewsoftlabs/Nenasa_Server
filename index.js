@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(function (req, res, next) {
   const allowedOrigins = [
       'http://localhost:3000',
-      'http://nenasa-stagin.s3-website-us-east-1.amazonaws.com/',
+      'http://nenasa-stagin.s3-website-us-east-1.amazonaws.com',
   ];
 
   const origin = req.headers.origin;
