@@ -30,7 +30,7 @@ module.exports = (config) => {
     router.get('/all', authorizeAccessControll, getAll);
     router.get('/:userid', authenticateToken, findUser);
     router.put('/status/:userid', authorizeAccessControll, changeStatus);
-    router.put('/delete/:userid', authorizeAccessControll, deleteuser);
+    router.delete('/delete/:userid', authorizeAccessControll, deleteuser);
     router.put('/delete', authorizeAccessControll, deleteUsers);
     router.put('/update/:userid', authorizeAccessControll, updateUser);
     router.use('/getprofile', express.static('src/uploads/profile/'));
