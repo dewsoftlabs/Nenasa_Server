@@ -93,7 +93,7 @@ const findUser = (req, res) => {
 
 const addUser = (req, res) => {
   const user = req.body; // Retrieve the user data from the request body
-
+  console.log(user)
   // Email validation regular expression
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
