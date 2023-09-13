@@ -14,13 +14,13 @@ const CategoryModel = {
   },
 
   addCategory(category, callback) {
-    const { cat_name } = category;
+    const { cat_name , deposit  } = category;
     const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const defaultValues = 0;
-    const activeValues = 1;
+    const activeValues = 0;
 
-    const query = 'INSERT INTO category (cat_name, trndate, status, is_delete) VALUES (?, ?, ?, ?)';
-    const values = [cat_name, trndate, activeValues, defaultValues];
+    const query = 'INSERT INTO category (cat_name, deposit ,trndate, is_delete) VALUES (?, ?, ?, ?)';
+    const values = [cat_name, deposit ,trndate, activeValues, defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {
@@ -34,20 +34,20 @@ const CategoryModel = {
   },
 
   updateCategory(category, categoryId, callback) {
-    const { cat_name, status } = category;
-    const query = 'UPDATE category SET cat_name = ?, status = ? WHERE catid = ?';
-    const values = [cat_name, status ,categoryId];
+    const { cat_name, deposit } = category;
+    const query = 'UPDATE category SET cat_name = ?, deposit = ? WHERE catid = ?';
+    const values = [cat_name, deposit ,categoryId];
     connection.query(query, values, callback);
   },
 
  
 
-  updateCategoryStatus(categoryId, status, callback) {
-    const query = 'UPDATE category SET status = ? WHERE catid = ?';
-    const values = [status, categoryId];
+  // updateCategoryStatus(categoryId, status, callback) {
+  //   const query = 'UPDATE category SET status = ? WHERE catid = ?';
+  //   const values = [status, categoryId];
 
-    connection.query(query, values, callback);
-  },
+  //   connection.query(query, values, callback);
+  // },
 
   deleteCategory(categoryId, value, callback) {
     const query = 'UPDATE category SET is_delete = ? WHERE catid = ?';

@@ -114,31 +114,31 @@ const updateCategory = (req, res) => {
       };
 
 
-const updateCategoryStatus = (req, res) => {
-    const { categoryId } = req.params;
-    const { status } = req.body;
+// const updateCategoryStatus = (req, res) => {
+//     const { categoryId } = req.params;
+//     const { status } = req.body;
 
-    CategoryModel.getCategoryById(categoryId, (error, results) => {
-        if (error) {
-            res.status(500).send({ error: 'Error fetching data from the database' });
-            return;
-        }
+//     CategoryModel.getCategoryById(categoryId, (error, results) => {
+//         if (error) {
+//             res.status(500).send({ error: 'Error fetching data from the database' });
+//             return;
+//         }
 
-        if (results.length === 0) {
-            res.status(404).send({ error: 'Category not found' });
-            return;
-        }
+//         if (results.length === 0) {
+//             res.status(404).send({ error: 'Category not found' });
+//             return;
+//         }
 
-        CategoryModel.updateCategoryStatus(categoryId, status, (error, results) => {
-            if (error) {
-                res.status(500).send({ error: 'Error updating status in the database' });
-                return;
-            }
+//         CategoryModel.updateCategoryStatus(categoryId, status, (error, results) => {
+//             if (error) {
+//                 res.status(500).send({ error: 'Error updating status in the database' });
+//                 return;
+//             }
 
-            res.status(200).send({ message: 'Status updated successfully' });
-        });
-    });
-};
+//             res.status(200).send({ message: 'Status updated successfully' });
+//         });
+//     });
+// };
 
 
 const deleteCategory = (req, res) => {
@@ -239,7 +239,6 @@ module.exports = {
     getCategoryById,
     addCategory,
     updateCategory,
-    updateCategoryStatus,
     deleteCategory,
     permanentDeleteCategory,
     deleteCategories

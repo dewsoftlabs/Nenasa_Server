@@ -7,6 +7,7 @@ const userroleRoute = require('./userrole/userrole');
 const permissionRoute = require('./permission/permission');
 const permissionGroupRoute = require('./permission_group/permission_group');
 const customerRoute = require('./customer/customer');
+const routeRoute = require('./route/route');
 
 
 module.exports = (config) => {
@@ -24,6 +25,7 @@ module.exports = (config) => {
   
   //filter routes
   router.use('/category', categoryRoute(config)); //admin user only
+  router.use('/route', routeRoute(config));
   router.use('/permission', permissionRoute(config)); //super admin only
   router.use('/permission_group', permissionGroupRoute(config)); //super admin only
 

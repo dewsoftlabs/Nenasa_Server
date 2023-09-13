@@ -25,13 +25,12 @@ const UserRoleModel = {
   },
 
   addUserRole(userRole, callback) {
-    const { role } = userRole;
     const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const defaultValues = 0;
     const activeValues = 1;
 
     const query = 'INSERT INTO userrole (role, trndate, status, is_delete) VALUES (?, ?, ?, ?)';
-    const values = [role, trndate, activeValues, defaultValues];
+    const values = [userRole.role, trndate, activeValues, defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {

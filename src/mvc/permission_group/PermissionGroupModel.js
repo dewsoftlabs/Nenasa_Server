@@ -17,8 +17,7 @@ const AssignPermissionModel = {
     connection.query('SELECT * FROM userrole WHERE userroleid = ? AND is_delete = 0', [userRoleId], callback);
   },
 
-  addAssignPermission(assignPermission, callback) {
-    const { permission_code, userroleid } = assignPermission;
+  addAssignPermission(userroleid , permission_code,  callback) {
     const adddate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const defaultValues = 0;
     const activeValues = 1;

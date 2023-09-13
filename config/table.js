@@ -12,6 +12,8 @@ const tableInfo = [
       { name: 'phonenumber', type: 'VARCHAR(10)' },
       { name: 'address', type: 'VARCHAR(255)' },
       { name: 'email', type: 'VARCHAR(255)' },
+      { name: 'gender', type: 'VARCHAR(10)' },
+      { name: 'nic', type: 'INT(255)' },
       { name: 'username', type: 'VARCHAR(255)' },
       { name: 'password', type: 'VARCHAR(255)' },
       { name: 'profileimage', type: 'VARCHAR(255)' },
@@ -42,8 +44,18 @@ const tableInfo = [
     fields: [
       { name: 'catid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
       { name: 'cat_name', type: 'VARCHAR(255)' },
+      { name: 'deposit', type: 'INT(255)' },
       { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
+      { name: 'is_delete', type: 'INT(5)' },
+    ],
+  },
+
+  {
+    tableName: 'route',
+    fields: [
+      { name: 'routeid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+      { name: 'route_name', type: 'VARCHAR(255)' },
+      { name: 'trndate', type: 'DATETIME' },
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
@@ -104,6 +116,23 @@ const tableInfo = [
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
+
+  // {
+  //   tableName: 'employee',
+  //   fields: [
+  //     { name: 'employee_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+  //     { name: 'employee_name', type: 'VARCHAR(255)' },
+  //     { name: 'employee_address', type: 'VARCHAR(255)' },
+  //     { name: 'employee_phone', type: 'VARCHAR(15)' },
+  //     { name: 'employee_email', type: 'VARCHAR(255)' },
+  //     { name: 'employee_gender', type: 'VARCHAR(255)' },
+  //     { name: 'employee_nic', type: 'VARCHAR(20)' },
+  //     { name: 'status', type: 'INT(5)' },
+  //     { name: 'role', type: 'INT(5)' },
+  //     { name: 'trndate', type: 'DATETIME' },
+  //     { name: 'is_delete', type: 'INT(5)' },
+  //   ],
+  // },
   
 ];
 
