@@ -93,7 +93,7 @@ const findUser = (req, res) => {
 
 const addUser = (req, res) => {
   const user = req.body; // Retrieve the user data from the request body
-  console.log(user)
+
   // Email validation regular expression
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -128,6 +128,8 @@ const addUser = (req, res) => {
         res.status(409).send({ error: "Phone number already exists" });
         return;
       }
+
+      console.log(user)
 
       UserModel.getUserByPhonenumber(user.phonenumber, (error, results) => {
         if (error) {
