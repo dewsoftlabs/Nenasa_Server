@@ -129,8 +129,6 @@ const addUser = (req, res) => {
         return;
       }
 
-      console.log(user)
-
       UserModel.getUserByPhonenumber(user.phonenumber, (error, results) => {
         if (error) {
           res
