@@ -34,7 +34,7 @@ const UserModel = {
     const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const defaultvalues = 0;
     const activevalues=0;
-
+    console.log(user)
     const updateEmpty = "";
 
     const query = 'INSERT INTO user (fullname, phonenumber, address, email, gender , nic , username, password, userroleid, trndate, status, is_delete, branchid, profileimage) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)';
