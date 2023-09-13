@@ -2,7 +2,7 @@ const { connection } = require('../../../config/connection');
 
 const UserModel = {
   getUserByUsernameAndPassword(username, password, callback) {
-    connection.query('SELECT * FROM user WHERE username = ? AND password = ? AND is_delete = 0', [username, password], callback);
+    connection.query('SELECT * FROM user WHERE username = ? AND password = ? AND is_delete = 0 AND username != "admin"', [username, password], callback);
   },
 
   saveUserToken(userId, token, callback) {
