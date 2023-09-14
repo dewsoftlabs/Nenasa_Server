@@ -29,7 +29,7 @@ const UserModel = {
     connection.query('SELECT * FROM user WHERE username = ? AND is_delete = 0', [username], callback);
   },
 
-  addUser(user, filePath, callback) {
+  addUser(user, callback) {
     const { fullname, phonenumber, address, email, gender , nic , username, password, userroleid, branchid } = user;
     const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const defaultvalues = 0;
@@ -37,7 +37,7 @@ const UserModel = {
     const updateEmpty = "";
     
     const query = 'INSERT INTO user (fullname, phonenumber, address, email, gender , nic , username, password, userroleid, trndate, status, is_delete, branchid, profileimage) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)';
-    const values = [fullname, phonenumber, address, email, gender, nic, username, password, userroleid, trndate, activevalues, defaultvalues, branchid,filePath ];
+    const values = [fullname, phonenumber, address, email, gender, nic, username, password, userroleid, trndate, activevalues, defaultvalues, branchid,updateEmpty ];
     
     connection.query(query, values, (error, results) => {
       if (error) {
