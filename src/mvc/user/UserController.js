@@ -93,7 +93,9 @@ const findUser = (req, res) => {
 
 const addUser = (req, res) => {
   const user = req.body; // Retrieve the user data from the request body
+  const filePath = req.file.filename;
 
+  console.log(filePath);
   // Email validation regular expression
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -155,7 +157,7 @@ const addUser = (req, res) => {
             return;
           }
 
-          UserModel.addUser(user, (error, userId) => {
+          UserModel.addUser(user, filePath, (error, userId) => {
             if (error) {
               res
                 .status(500)

@@ -23,7 +23,7 @@ module.exports = (config) => {
     const router = express.Router();
 
     //login and create
-    router.post('/create', addUser);
+    router.post('/create', uploadProfile.single('profile'), addUser);
     router.post('/login', login);
 
     //admin controls
