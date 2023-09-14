@@ -7,6 +7,7 @@ const {
   updateAssignPermissionStatus,
   deleteAssignPermission,
   permanentDeleteAssignPermission,
+  getAllUserRoleAssignPermissions,
   deleteAssignPermissions,
 } = require('../../mvc/permission_group/PermissionGroupController');
 const { authenticateToken } = require('../../middlewares/userAuth');
@@ -17,6 +18,7 @@ module.exports = (config) => {
 
   router.post('/create', authorizeAccessSupoerAdmin, addAssignPermission);
   router.get('/all', authorizeAccessSupoerAdmin, getAllAssignPermissions);
+  router.get('/role/all', authorizeAccessSupoerAdmin, getAllUserRoleAssignPermissions);
   router.get('/:assignPermissionId', authorizeAccessSupoerAdmin, getAssignPermissionById);
   router.put('/status/:assignPermissionId', authorizeAccessSupoerAdmin, updateAssignPermissionStatus);
   router.put('/delete/:assignPermissionId', authorizeAccessSupoerAdmin, deleteAssignPermission);
