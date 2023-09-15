@@ -21,7 +21,7 @@ module.exports = (config) => {
   router.get('/role/all', authorizeAccessSupoerAdmin, getAllUserRoleAssignPermissions);
   router.get('/:assignPermissionId', authorizeAccessSupoerAdmin, getAssignPermissionById);
   router.put('/status/:assignPermissionId', authorizeAccessSupoerAdmin, updateAssignPermissionStatus);
-  router.put('/delete/:assignPermissionId', authorizeAccessSupoerAdmin, deleteAssignPermission);
+  router.delete('/delete/:assignPermissionId', authorizeAccessSupoerAdmin, deleteAssignPermission);
   router.put('/delete', authorizeAccessSupoerAdmin, deleteAssignPermissions);
   router.put('/update/:assignPermissionId', authorizeAccessSupoerAdmin, updateAssignPermission);
 
