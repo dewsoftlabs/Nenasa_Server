@@ -155,7 +155,7 @@ const deleteAssignPermission = (req, res) => {
       return;
     }
 
-    AssignPermissionModel.deleteAssignPermission(assignPermissionId, 1, (error, deleteResult) => {
+    AssignPermissionModel.deleteAssignPermission(assignPermissionId, (error, deleteResult) => {
       if (error) {
         res.status(500).send({ error: 'Error updating deletion in the database' });
         return;
