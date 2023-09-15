@@ -6,7 +6,7 @@ const AssignPermissionModel = {
   },
 
   getAllUserRolePermissions(callback) {
-    connection.query('SELECT * FROM userrole JOIN assign_permission ON userrole.userroleid = assign_permission.userroleid WHERE assign_permission.is_delete = 0', callback);
+    connection.query('SELECT * FROM userrole JOIN assign_permission ON userrole.userroleid = assign_permission.userroleid JOIN permission ON permission.permission_code = assign_permission.permission_code WHERE assign_permission.is_delete = 0', callback);
   },
 
   getAssignPermissionById(assignPermissionId, callback) {
