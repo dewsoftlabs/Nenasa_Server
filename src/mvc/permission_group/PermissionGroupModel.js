@@ -41,10 +41,10 @@ const AssignPermissionModel = {
   },
 
   updateAssignPermission(assignPermission, assignPermissionId, callback) {
-    const { permission_code, userroleid, status } = assignPermission;
+    const { permission_code, status } = assignPermission;
 
-    const query = 'UPDATE assign_permission SET permission_code = ?, userroleid = ?, status = ? WHERE assignpermissionid = ?';
-    const values = [permission_code, userroleid, status, assignPermissionId];
+    const query = 'UPDATE assign_permission SET permission_code = ?, status = ? WHERE assignpermissionid = ?';
+    const values = [permission_code, status, assignPermissionId];
 
     connection.query(query, values, callback);
   },
