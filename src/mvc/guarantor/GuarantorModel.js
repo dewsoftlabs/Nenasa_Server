@@ -93,6 +93,13 @@ const GuarantorModel = {
             }
           }
       } ,
+
+      updateGuarantorstatus(guarantor_id, status, callback) {
+        const query = 'UPDATE guarantor SET status = ? WHERE guarantor_id = ?';
+        const values = [status, guarantor_id];
+    
+        connection.query(query, values, callback);
+      },
 }
 
 module.exports = GuarantorModel;

@@ -9,6 +9,7 @@ const permissionGroupRoute = require('./permission_group/permission_group');
 const customerRoute = require('./customer/customer');
 const guarantorRoute = require('./guarantor/guarantor');
 const routeRoute = require('./route/route');
+const targetRoute = require("./target/target");
 
 
 module.exports = (config) => {
@@ -30,6 +31,7 @@ module.exports = (config) => {
   router.use('/route', routeRoute(config));
   router.use('/permission', permissionRoute(config)); //super admin only
   router.use('/permission_group', permissionGroupRoute(config)); //super admin only
+  router.use('/target',targetRoute(config));
 
   return router;
 };

@@ -19,7 +19,7 @@ const RouteModel = {
     const defaultValues = 0;
     const activeValues = 0;
 
-    const query = "INSERT INTO route (route_name, userid ,trndate, is_delete) VALUES (?, ?, ?)";
+    const query = "INSERT INTO route (route_name, userid ,trndate, is_delete) VALUES (?, ?, ?,?)";
     const values = [route_name, userid, trndate, activeValues, defaultValues];
 
     connection.query(query, values, (error, results) => {

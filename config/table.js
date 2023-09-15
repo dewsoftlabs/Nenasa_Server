@@ -116,7 +116,7 @@ const tableInfo = [
       { name: 'customer_gender', type: 'VARCHAR(10)' },
       { name: 'customer_nic', type: 'INT(255)' },
       { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
+      { name: 'status', type: 'VARCHAR(5)' },
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
@@ -131,7 +131,18 @@ const tableInfo = [
       { name: 'guarantor_address', type: 'VARCHAR(255)' },
       { name: 'guarantor_nic', type: 'INT(255)' },
       { name: 'trndate', type: 'DATETIME' },
-      { name: 'status', type: 'INT(5)' },
+      { name: 'status', type: 'VARCHAR(5)' },
+      { name: 'is_delete', type: 'INT(5)' },
+    ],
+  },
+
+  {
+    tableName: 'target',
+    fields: [
+      { name: 'target_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+      { name: 'target_amount', type: 'FLOAT(10,2)' },
+      { name: 'target_period', type: 'VARCHAR(15)' },
+      { name: 'trndate', type: 'DATETIME' },
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },

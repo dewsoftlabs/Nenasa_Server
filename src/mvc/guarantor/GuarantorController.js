@@ -311,6 +311,35 @@ const getAllGuarantors = (req, res) => {
     }
   };
 
+  const updateGuarantorStatus = (req, res) => {
+
+    const { guarantor_id } = req.params;
+    const { status } = req.body;
+  
+    GuarantorModel.getGuarantorById(guarantor_id, (error, results) => {
+      if (error) {
+        res.status(500).send({ error: "Error fetching data from the database" });
+        return;
+      }
+  
+      if (results.length === 0) {
+        res.status(404).send({ error: "Guarantor not found" });
+        return;
+      }
+  
+      GuarantorModel.updateGuarantorstatus(guarantor_id, status, (error, results) => {
+        if (error) {
+          res
+            .status(500)
+            .send({ error: "Error updating status in the database" });
+          return;
+        }
+  
+        res.status(200).send({ message: "Status updated successfully" });
+      });
+    });
+  };
+
 module.exports = {
     validateEmail,
     validateMobileNumber,
@@ -320,4 +349,5 @@ module.exports = {
     updateGuarantor,
     deleteGuarantor,
     deleteGuarantors,
+    updateGuarantorStatus,
 }

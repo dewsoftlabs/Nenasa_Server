@@ -314,6 +314,35 @@ const deleteCustomer = (req, res) => {
   });
 };
 
+const updateCustomerStatus = (req, res) => {
+
+  const { customer_id } = req.params;
+  const { status } = req.body;
+
+  CustomerModel.getCustomerById(customer_id, (error, results) => {
+    if (error) {
+      res.status(500).send({ error: "Error fetching data from the database" });
+      return;
+    }
+
+    if (results.length === 0) {
+      res.status(404).send({ error: "Customer not found" });
+      return;
+    }
+
+    CustomerModel.updateCustomerstatus(customer_id, status, (error, results) => {
+      if (error) {
+        res
+          .status(500)
+          .send({ error: "Error updating status in the database" });
+        return;
+      }
+
+      res.status(200).send({ message: "Status updated successfully" });
+    });
+  });
+};
+
 module.exports = {
   addCustomer,
   updateCustomer,
@@ -321,4 +350,5 @@ module.exports = {
   getCustomerById,
   deleteCustomers,
   deleteCustomer,
+  updateCustomerStatus,
 };

@@ -7,6 +7,7 @@ const {
     updateCustomer,
     deleteCustomers,
     deleteCustomer,
+    updateCustomerStatus,
     
 
 } = require ('../../mvc/customer/CustomerController');
@@ -20,6 +21,7 @@ module.exports = (config) => {
     router.post('/create', authorizeAccessControll,addCustomer);
     router.get('/all', authorizeAccessControll,getAllCustomers);
     router.get('/:customer_id', authorizeAccessControll,getCustomerById);
+    router.put('/status/:customer_id', authorizeAccessControll, updateCustomerStatus);
     router.put('/update/:customer_id', authorizeAccessControll,updateCustomer);
     router.put('/delete/:customer_id', authorizeAccessControll,deleteCustomer);
     router.put('/delete', authorizeAccessControll,deleteCustomers);

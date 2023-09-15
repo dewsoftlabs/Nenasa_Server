@@ -95,6 +95,13 @@ const customerModel = {
         }
       } ,
 
+      updateCustomerstatus(customerid, status, callback) {
+        const query = 'UPDATE customer SET status = ? WHERE customer_id = ?';
+        const values = [status, customerid];
+    
+        connection.query(query, values, callback);
+      },
+
 }
 
 module.exports = customerModel;
