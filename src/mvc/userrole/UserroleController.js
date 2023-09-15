@@ -101,7 +101,7 @@ const getUserRoleById = (req, res) => {
 };
 
 const addUserRole = (req, res) => {
-  const { role, permissions } = req.body;
+  const { role, permisssionslist } = req.body;
 
   // Create the user role first
   UserRoleModel.addUserRole({role}, (error, userRoleId) => {
@@ -116,7 +116,7 @@ const addUserRole = (req, res) => {
     }
 
     // Loop through the permissions array and assign each permission
-    permissions.forEach((permission) => {
+    permisssionslist.values.forEach((permission) => {
       PermissionGroupModel.addAssignPermission(
         userRoleId,
         permission,
