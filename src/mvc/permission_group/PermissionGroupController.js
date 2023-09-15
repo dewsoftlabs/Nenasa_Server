@@ -12,7 +12,7 @@ const getAllAssignPermissions = (req, res) => {
 };
 
 const getAllUserRoleAssignPermissions = (req, res) => {
-  AssignPermissionModel.getAllAssignPermissions((error, results) => {
+  AssignPermissionModel.getAllUserRolePermissions((error, results) => {
     if (error) {
       res.status(500).send({ error: 'Error fetching data from the database' });
       return;
