@@ -5,7 +5,8 @@ const {
     getAllCustomers,
     getCustomerById,
     updateCustomer,
-    deleteCustomers
+    deleteCustomers,
+    deleteCustomer,
     
 
 } = require ('../../mvc/customer/CustomerController');
@@ -20,6 +21,7 @@ module.exports = (config) => {
     router.get('/all', authorizeAccessControll,getAllCustomers);
     router.get('/:customer_id', authorizeAccessControll,getCustomerById);
     router.put('/update/:customer_id', authorizeAccessControll,updateCustomer);
+    router.put('/delete/:customer_id', authorizeAccessControll,deleteCustomer);
     router.put('/delete', authorizeAccessControll,deleteCustomers);
 
   

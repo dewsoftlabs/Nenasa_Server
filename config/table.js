@@ -55,6 +55,7 @@ const tableInfo = [
     fields: [
       { name: 'routeid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
       { name: 'route_name', type: 'VARCHAR(255)' },
+      { name: 'userid', type: 'INT(255)' },
       { name: 'trndate', type: 'DATETIME' },
       { name: 'is_delete', type: 'INT(5)' },
     ],
@@ -111,6 +112,24 @@ const tableInfo = [
       { name: 'customer_name', type: 'VARCHAR(255)' },
       { name: 'customer_phone', type: 'VARCHAR(15)' },
       { name: 'customer_email', type: 'VARCHAR(255)' },
+      { name: 'customer_address', type: 'VARCHAR(255)' },
+      { name: 'customer_gender', type: 'VARCHAR(10)' },
+      { name: 'customer_nic', type: 'INT(255)' },
+      { name: 'trndate', type: 'DATETIME' },
+      { name: 'status', type: 'INT(5)' },
+      { name: 'is_delete', type: 'INT(5)' },
+    ],
+  },
+
+  {
+    tableName: 'guarantor',
+    fields: [
+      { name: 'guarantor_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+      { name: 'guarantor_name', type: 'VARCHAR(255)' },
+      { name: 'guarantor_phone', type: 'VARCHAR(15)' },
+      { name: 'guarantor_email', type: 'VARCHAR(255)' },
+      { name: 'guarantor_address', type: 'VARCHAR(255)' },
+      { name: 'guarantor_nic', type: 'INT(255)' },
       { name: 'trndate', type: 'DATETIME' },
       { name: 'status', type: 'INT(5)' },
       { name: 'is_delete', type: 'INT(5)' },

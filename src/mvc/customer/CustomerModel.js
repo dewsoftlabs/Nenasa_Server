@@ -20,13 +20,13 @@ const customerModel = {
     
 
     addCustomer(customer, callback) {
-        const { customer_name,customer_phone,customer_email } = customer;
+        const { customer_name,customer_phone,customer_email , customer_address ,customer_gender , customer_nic } = customer;
         const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const defaultValues = 0;
         const activeValues = 1;
     
-        const query = 'INSERT INTO customer (customer_name, customer_phone, customer_email, trndate, status, is_delete) VALUES (?, ?, ?, ?, ?, ?)';
-        const values = [customer_name,customer_phone,customer_email, trndate, activeValues, defaultValues];
+        const query = 'INSERT INTO customer (customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic ,trndate, status, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ? , ?)';
+        const values = [customer_name,customer_phone,customer_email, customer_address , customer_gender , customer_nic , trndate, activeValues, defaultValues];
     
         connection.query(query, values, (error, results) => {
           if (error) {
@@ -40,9 +40,9 @@ const customerModel = {
       },
 
       updateCustomer(customer, customer_id, callback) {
-        const { customer_name, customer_phone, customer_email, status } = customer;
-        const query = 'UPDATE customer SET customer_name = ?, customer_phone = ?, customer_email = ?, status = ? WHERE customer_id = ?';
-        const values = [customer_name, customer_phone, customer_email, status, customer_id];
+        const { customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic , status } = customer;
+        const query = 'UPDATE customer SET customer_name = ?, customer_phone = ?, customer_email = ?, customer_address = ?, customer_gender = ? , customer_nic = ? , status = ? WHERE customer_id = ?';
+        const values = [customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic , status, customer_id];
     
         connection.query(query, values, callback);
       },
@@ -54,8 +54,6 @@ const customerModel = {
         connection.query(query, values, callback);
       },
 
-
-
       deleteCustomers(customer_id, callback) {
         if (!Array.isArray(customer_id)) {
             customerid = [customer_id]; // Convert to array if it's a single customer ID
@@ -64,13 +62,13 @@ const customerModel = {
         let successCount = 0;
         let failCount = 0;
         
-        for (const brandId of brandIds) {
-          BrandModel.getBrandById(brandId, (error, results) => {
+        for (const customerId of customerIds) {
+          CustomerModel.getCustomerById(customerId, (error, results) => {
             if (error || results.length === 0) {
               failCount++;
               checkCompletion();
             } else {
-              BrandModel.deleteBrand(brandId, 1, (deleteError, deleteResult) => {
+              CustomerModel.deleteCustomer(customerId, 1, (deleteError, deleteResult) => {
                 if (deleteError) {
                   failCount++;
                 } else {
@@ -84,7 +82,7 @@ const customerModel = {
         }
       
         function checkCompletion() {
-          const totalCount = brandIds.length;
+          const totalCount = customerIds.length;
           if (successCount + failCount === totalCount) {
             if (typeof callback === 'function') { // Check if callback is provided and is a function
               callback(null, {

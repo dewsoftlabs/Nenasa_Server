@@ -14,13 +14,13 @@ const RouteModel = {
   },
 
   addRoute(route, callback) {
-    const { route_name } = route;
+    const { route_name , userid } = route;
     const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const defaultValues = 0;
     const activeValues = 0;
 
-    const query = "INSERT INTO route (route_name, trndate, is_delete) VALUES (?, ?, ?)";
-    const values = [route_name, trndate, activeValues, defaultValues];
+    const query = "INSERT INTO route (route_name, userid ,trndate, is_delete) VALUES (?, ?, ?)";
+    const values = [route_name, userid, trndate, activeValues, defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {
@@ -35,7 +35,7 @@ const RouteModel = {
 
   updateRoute(route, routeId, callback) {
     const { route_name } = route;
-    const query = "UPDATE route SET route_name = ? WHERE routeid = ?";
+    const query = "UPDATE route SET route_name = ? , userid = ? WHERE routeid = ?";
     const values = [route_name, routeId];
     connection.query(query, values, callback);
   },
