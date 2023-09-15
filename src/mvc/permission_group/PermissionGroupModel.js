@@ -57,7 +57,7 @@ const AssignPermissionModel = {
   },
 
   deleteAssignPermission(assignPermissionId, callback) {
-    const query = 'DELETE assign_permission WHERE assignpermissionid = ?';
+    const query = 'DELETE FROM assign_permission WHERE assignpermissionid = ?';
     const values = [assignPermissionId];
 
     connection.query(query, values, callback);
