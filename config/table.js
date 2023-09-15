@@ -9,11 +9,11 @@ const tableInfo = [
     fields: [
       { name: 'userid', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
       { name: 'fullname', type: 'VARCHAR(255)' },
-      { name: 'phonenumber', type: 'VARCHAR(10)' },
+      { name: 'phonenumber', type: 'VARCHAR(15)' },
       { name: 'address', type: 'VARCHAR(255)' },
       { name: 'email', type: 'VARCHAR(255)' },
       { name: 'gender', type: 'VARCHAR(10)' },
-      { name: 'nic', type: 'INT(255)' },
+      { name: 'nic', type: 'VARCHAR(255)' },
       { name: 'username', type: 'VARCHAR(255)' },
       { name: 'password', type: 'VARCHAR(255)' },
       { name: 'profileimage', type: 'VARCHAR(255)' },

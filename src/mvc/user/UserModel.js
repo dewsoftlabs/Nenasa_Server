@@ -10,7 +10,7 @@ const UserModel = {
   },
 
   getAll(callback) {
-    connection.query('SELECT * FROM user WHERE is_delete = 0', callback);
+    connection.query('SELECT * FROM user WHERE is_delete = 0 AND username != "admin"', callback);
   },
 
   getUserById(userid, callback) {
@@ -34,14 +34,14 @@ const UserModel = {
     const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const defaultvalues = 0;
     const activevalues=0;
-    console.log(user)
     const updateEmpty = "";
-
+    
     const query = 'INSERT INTO user (fullname, phonenumber, address, email, gender , nic , username, password, userroleid, trndate, status, is_delete, branchid, profileimage) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)';
     const values = [fullname, phonenumber, address, email, gender, nic, username, password, userroleid, trndate, activevalues, defaultvalues, branchid,updateEmpty ];
-
+    
     connection.query(query, values, (error, results) => {
       if (error) {
+        console.log(error)
         callback(error, null);
         return;
       }

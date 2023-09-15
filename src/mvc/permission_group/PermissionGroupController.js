@@ -11,6 +11,17 @@ const getAllAssignPermissions = (req, res) => {
   });
 };
 
+const getAllUserRoleAssignPermissions = (req, res) => {
+  AssignPermissionModel.getAllAssignPermissions((error, results) => {
+    if (error) {
+      res.status(500).send({ error: 'Error fetching data from the database' });
+      return;
+    }
+
+    res.status(200).send(results);
+  });
+};
+
 const getAssignPermissionById = (req, res) => {
   const { assignPermissionId } = req.params;
   AssignPermissionModel.getAssignPermissionById(assignPermissionId, (error, results) => {
@@ -225,4 +236,5 @@ module.exports = {
   deleteAssignPermission,
   permanentDeleteAssignPermission,
   deleteAssignPermissions,
+  getAllUserRoleAssignPermissions
 };
