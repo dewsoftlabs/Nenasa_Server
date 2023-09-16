@@ -11,7 +11,8 @@ const guarantorRoute = require('./guarantor/guarantor');
 const routeRoute = require('./route/route');
 const targetRoute = require("./target/target");
 const loantypeRoute = require("./loan_type/loan_type");
-
+const termsRoute = require("./terms/Terms");
+const depositTypeRoute = require("./deposit_type/DepositType");
 
 module.exports = (config) => {
   const router = express.Router();
@@ -34,6 +35,8 @@ module.exports = (config) => {
   router.use('/permission_group', permissionGroupRoute(config)); //super admin only
   router.use('/target',targetRoute(config));
   router.use('/loan_type',loantypeRoute(config));
+  router.use('/terms',termsRoute(config));
+  router.use('/depositType',depositTypeRoute(config));
 
   return router;
 };

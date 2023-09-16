@@ -151,11 +151,34 @@ const tableInfo = [
     tableName: 'loan_type',
     fields: [
       { name: 'loantype_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
-      { name: 'loantype_name', type: 'VARCHAR(255)' },
+      { name: 'loantype_name', type: 'VARCHAR(15)' },
       { name: 'trndate', type: 'DATETIME' },
       { name: 'is_delete', type: 'INT(5)' },
     ],
   },
+
+  {
+    tableName: 'terms',
+    fields: [
+      { name: 'terms_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+      { name: 'no_of_terms', type: 'VARCHAR(255)' },
+      { name: 'trndate', type: 'DATETIME' },
+      { name: 'is_delete', type: 'INT(5)' },
+    ],
+  },
+
+  {
+    tableName: 'deposit_type',
+    fields: [
+      { name: 'depositType_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+      { name: 'depositType_name', type: 'VARCHAR(255)' },
+      { name: 'depositType_rate', type: 'FLOAT(10,2)' },
+      { name: 'trndate', type: 'DATETIME' },
+      { name: 'is_delete', type: 'INT(5)' },
+    ],
+  },
+
+
 
 
   // {
