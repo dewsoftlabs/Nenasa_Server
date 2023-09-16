@@ -6,7 +6,7 @@ const AssignPermissionModel = {
   },
 
   getAllUserRolePermissions(callback) {
-    connection.query('SELECT * FROM userrole JOIN assign_permission ON userrole.userroleid = assign_permission.userroleid WHERE assign_permission.is_delete = 0', callback);
+    connection.query('SELECT * FROM userrole JOIN assign_permission ON userrole.userroleid = assign_permission.userroleid JOIN permission ON permission.permission_code = assign_permission.permission_code WHERE assign_permission.is_delete = 0', callback);
   },
 
   getAssignPermissionById(assignPermissionId, callback) {
@@ -41,10 +41,10 @@ const AssignPermissionModel = {
   },
 
   updateAssignPermission(assignPermission, assignPermissionId, callback) {
-    const { permission_code, userroleid, status } = assignPermission;
+    const { permission_code, status } = assignPermission;
 
-    const query = 'UPDATE assign_permission SET permission_code = ?, userroleid = ?, status = ? WHERE assignpermissionid = ?';
-    const values = [permission_code, userroleid, status, assignPermissionId];
+    const query = 'UPDATE assign_permission SET permission_code = ?, status = ? WHERE assignpermissionid = ?';
+    const values = [permission_code, status, assignPermissionId];
 
     connection.query(query, values, callback);
   },
@@ -56,9 +56,9 @@ const AssignPermissionModel = {
     connection.query(query, values, callback);
   },
 
-  deleteAssignPermission(assignPermissionId, is_delete, callback) {
-    const query = 'UPDATE assign_permission SET is_delete = ? WHERE assignpermissionid = ?';
-    const values = [is_delete, assignPermissionId];
+  deleteAssignPermission(assignPermissionId, callback) {
+    const query = 'DELETE FROM assign_permission WHERE assignpermissionid = ?';
+    const values = [assignPermissionId];
 
     connection.query(query, values, callback);
   },
