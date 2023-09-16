@@ -20,7 +20,7 @@ const getTargetById = (req, res) => {
         }
 
         if (results.length === 0) {
-            res.status(404).send({ error: 'Route not found' });
+            res.status(404).send({ error: 'Target not found' });
             return;
         }
 

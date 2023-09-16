@@ -147,6 +147,17 @@ const tableInfo = [
     ],
   },
 
+  {
+    tableName: 'loan_type',
+    fields: [
+      { name: 'loantype_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+      { name: 'loantype_name', type: 'VARCHAR(255)' },
+      { name: 'trndate', type: 'DATETIME' },
+      { name: 'is_delete', type: 'INT(5)' },
+    ],
+  },
+
+
   // {
   //   tableName: 'employee',
   //   fields: [
