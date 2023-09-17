@@ -5,6 +5,10 @@ const RouteModel = {
     connection.query("SELECT * FROM route WHERE routeid = ? AND is_delete = 0",[routeId], callback );
   },
 
+  getRoutebyUserId(userid, callback) {
+    connection.query("SELECT * FROM route WHERE userid = ? AND is_delete = 0",[userid], callback );
+  },
+
   getAllRoutes(callback) {
     connection.query("SELECT * FROM route WHERE is_delete = 0", callback);
   },
@@ -17,10 +21,9 @@ const RouteModel = {
     const { route_name , userid } = route;
     const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const defaultValues = 0;
-    const activeValues = 0;
 
     const query = "INSERT INTO route (route_name, userid ,trndate, is_delete) VALUES (?, ?, ?,?)";
-    const values = [route_name, userid, trndate, activeValues, defaultValues];
+    const values = [route_name, userid, trndate, defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {
@@ -34,9 +37,9 @@ const RouteModel = {
   },
 
   updateRoute(route, routeId, callback) {
-    const { route_name } = route;
+    const { route_name , userid } = route;
     const query = "UPDATE route SET route_name = ? , userid = ? WHERE routeid = ?";
-    const values = [route_name, routeId];
+    const values = [route_name, userid , routeId ];
     connection.query(query, values, callback);
   },
 

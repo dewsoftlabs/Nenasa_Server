@@ -178,7 +178,18 @@ const tableInfo = [
     ],
   },
 
-
+  {
+    tableName: 'deposit_acc',
+    fields: [
+      { name: 'deposit_acc_no', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+      { name: 'customer_id', type: 'INT(255)' },
+      { name: 'status', type: 'VARCHAR(5)' },
+      { name: 'hold_startDate', type: 'DATETIME' },
+      { name: 'hold_period', type: 'VARCHAR(255)' },
+      { name: 'trndate', type: 'DATETIME' },
+      { name: 'is_delete', type: 'INT(5)' },
+    ],
+  },
 
 
   // {

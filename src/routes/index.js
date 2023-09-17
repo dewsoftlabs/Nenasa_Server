@@ -13,6 +13,7 @@ const targetRoute = require("./target/target");
 const loantypeRoute = require("./loan_type/loan_type");
 const termsRoute = require("./terms/Terms");
 const depositTypeRoute = require("./deposit_type/DepositType");
+const depositAccRoute = require("./deposit_acc/depositAcc");
 
 module.exports = (config) => {
   const router = express.Router();
@@ -37,6 +38,7 @@ module.exports = (config) => {
   router.use('/loan_type',loantypeRoute(config));
   router.use('/terms',termsRoute(config));
   router.use('/depositType',depositTypeRoute(config));
+  router.use('/depositAcc',depositAccRoute(config));
 
   return router;
 };
