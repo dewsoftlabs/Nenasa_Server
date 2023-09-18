@@ -183,14 +183,44 @@ const tableInfo = [
     fields: [
       { name: 'deposit_acc_no', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
       { name: 'customer_id', type: 'INT(255)' },
+      { name: 'depositType_id', type: 'INT(255)' },
       { name: 'status', type: 'VARCHAR(5)' },
       { name: 'hold_startDate', type: 'DATETIME' },
       { name: 'hold_period', type: 'VARCHAR(255)' },
       { name: 'trndate', type: 'DATETIME' },
-      { name: 'is_delete', type: 'INT(5)' },
+      { name: 'is_delete', type: 'INT(5)' }
     ],
   },
 
+  
+  {
+    tableName: 'loan',
+    fields: [
+      { name: 'loan_id', type: 'INT AUTO_INCREMENT PRIMARY KEY' },
+      { name: 'customer_id', type: 'INT(255)' },
+      { name: 'deposit_acc_no', type: 'INT(255)' },
+      { name: 'guarantor_id', type: 'INT(255)' },
+      { name: 'business_name', type: 'VARCHAR(255)' },
+      { name: 'business_type', type: 'VARCHAR(255)' },
+      { name: 'userid', type: 'INT(255)' },
+      { name: 'loan_amount', type: 'FLOAT(10,2)' },
+      { name: 'rate', type: 'FLOAT(10,2)' },
+      { name: 'loan_category', type: 'INT(5)' },
+      { name: 'loantype_id', type: 'INT(255)' },
+      { name: 'terms_id', type: 'INT(255)' },
+      { name: 'installments', type: 'FLOAT(10,2)' },
+      { name: 'total_payable', type: 'FLOAT(10,2)' },
+      { name: 'startDate', type: 'DATETIME' },
+      { name: 'endDate', type: 'DATETIME' },
+      { name: 'document_charge', type: 'FLOAT(10,2)' },
+      { name: 'service_charge', type: 'FLOAT(10,2)' },
+      { name: 'hold_period', type: 'VARCHAR(255)' },
+      { name: 'deposit_amount', type: 'FLOAT(10,2)' },
+      { name: 'status', type: 'VARCHAR(20)' },
+      { name: 'trndate', type: 'DATETIME' },
+      { name: 'is_delete', type: 'INT(5)' }
+    ],
+  },
 
   // {
   //   tableName: 'employee',

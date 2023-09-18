@@ -95,9 +95,7 @@ const CategoryModel = {
         }
       }
     }
-  }
-  
-  ,
+  },
 
   permanentDeleteCategory(categoryId, callback) {
     const query = 'DELETE FROM category WHERE catid = ?';

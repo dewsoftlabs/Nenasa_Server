@@ -49,13 +49,9 @@ const addCustomer = (req, res) => {
     return;
   }
 
-  CustomerModel.getCustomerByemail(
-    customer.customer_email,
-    (error, results) => {
+  CustomerModel.getCustomerByemail(customer.customer_email,(error, results) => {
       if (error) {
-        res
-          .status(500)
-          .send({ error: "Error fetching data from the database" });
+        res.status(500).send({ error: "Error fetching data from the database" });
         return;
       }
 
@@ -64,15 +60,9 @@ const addCustomer = (req, res) => {
         return;
       }
 
-      //console.log(customer.customer_phone);
-
-      CustomerModel.getCustomerByphone(
-        customer.customer_phone,
-        (error, results) => {
+      CustomerModel.getCustomerByphone(customer.customer_phone,(error, results) => {
           if (error) {
-            res
-              .status(500)
-              .send({ error: "Error fetching data from the database" });
+            res.status(500).send({ error: "Error fetching data from the database" });
             return;
           }
 
@@ -80,6 +70,7 @@ const addCustomer = (req, res) => {
             res.status(409).send({ error: "Phone number already exists" });
             return;
           }
+          
           CustomerModel.addCustomer(customer, (error, customer_id) => {
             if (error) {
               res

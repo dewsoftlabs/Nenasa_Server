@@ -6,7 +6,8 @@ const {
     deleteDepositAccs,
     permanentDeleteDepoAcc,
     getAlldepositAccs,
-    getdepositAccByAccNo
+    getdepositAccByAccNo,
+    changeStatus
 } = require('../../mvc/deposit_acc/depositAccController');
 const { authenticateToken } = require('../../middlewares/userAuth');
 const { authorizeAccessControll } = require('../../middlewares/userAccess');
@@ -17,6 +18,7 @@ module.exports = (config) => {
     router.post('/create', authorizeAccessControll, addDepositAcc);
     router.get('/all', authorizeAccessControll, getAlldepositAccs);
     router.get('/:deposit_acc_no', authorizeAccessControll, getdepositAccByAccNo);
+    router.put('/status/:deposit_acc_no', authorizeAccessControll, changeStatus);
     router.put('/delete/:deposit_acc_no', authorizeAccessControll, deletedepositAcc);
     router.put('/delete', authorizeAccessControll, deleteDepositAccs);
     router.put('/update/:deposit_acc_no', authorizeAccessControll, updateDepositAcc);

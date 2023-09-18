@@ -13,14 +13,34 @@ const depositAccModel = {
     connection.query("SELECT * FROM deposit_acc WHERE customer_id = ? AND is_delete = 0",[customer_id],callback);
   },
 
-  adddepositAcc(deposit_acc, callback) {
-    const { customer_id, hold_startDate, hold_period } = deposit_acc;
+  adddepositAcc(customer_id ,deposit_acc, callback) {
+    const { depositType_id , hold_startDate, hold_period } = deposit_acc;
     const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const defaultValues = 0;
     const activeValues = 1;
 
-    const query = "INSERT INTO deposit_acc ( customer_id , status ,hold_startDate , hold_period ,trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?)";
-    const values = [customer_id, activeValues ,hold_startDate, hold_period , trndate,  defaultValues];
+    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , status ,hold_startDate , hold_period ,trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const values = [customer_id, depositType_id , activeValues ,hold_startDate, hold_period , trndate,  defaultValues];
+
+    connection.query(query, values, (error, results) => {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+
+      const depositAccId = results.insertId;
+      callback(null, depositAccId);
+    });
+  },
+
+  adddepositAccDirect(deposit_acc, callback) {
+    const { customer_id , depositType_id , hold_startDate, hold_period } = deposit_acc;
+    const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const defaultValues = 0;
+    const activeValues = 1;
+
+    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , status ,hold_startDate , hold_period ,trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const values = [customer_id, depositType_id , activeValues ,hold_startDate, hold_period , trndate,  defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {
@@ -34,9 +54,9 @@ const depositAccModel = {
   },
 
   updatedepositAcc(deposit_acc, deposit_acc_no, callback) {
-    const { hold_startDate, hold_period , customer_id } = deposit_acc;
-    const query = "UPDATE deposit_acc SET hold_startDate = ? ,  hold_period = ? , customer_id = ? WHERE deposit_acc_no = ?";
-    const values = [hold_startDate, hold_period, deposit_acc_no , customer_id];
+    const { hold_startDate, hold_period , customer_id , depositType_id } = deposit_acc;
+    const query = "UPDATE deposit_acc SET hold_startDate = ? ,  hold_period = ? , customer_id = ? , depositType_id = ? WHERE deposit_acc_no = ?";
+    const values = [hold_startDate, hold_period, deposit_acc_no , customer_id , depositType_id];
     connection.query(query, values, callback);
   },
 

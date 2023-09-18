@@ -18,6 +18,10 @@ const GuarantorModel = {
         connection.query('SELECT * FROM guarantor WHERE guarantor_email = ? AND is_delete = 0', [guarantor_email], callback);
       },
 
+      getGuarantorBynic(guarantor_nic, callback) {
+        connection.query('SELECT * FROM guarantor WHERE guarantor_nic = ? AND is_delete = 0', [guarantor_nic], callback);
+      },
+
     addGuarantor(guarantor, callback) {
         const { guarantor_name,guarantor_phone,guarantor_email , guarantor_address , guarantor_nic } = guarantor;
         const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');

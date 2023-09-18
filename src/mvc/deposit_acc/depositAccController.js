@@ -42,7 +42,7 @@ const addDepositAcc = (req, res) => {
       return;
     }
 
-    depositAccModel.adddepositAcc(deposit_acc, (error, deposit_acc_no) => {
+    depositAccModel.adddepositAccDirect(deposit_acc, (error, deposit_acc_no) => {
       if (error) {
         res
           .status(500)
@@ -207,6 +207,39 @@ const permanentDeleteDepoAcc = (req, res) => {
     });
 };
 
+const changeStatus = (req, res) => {
+  const { deposit_acc_no } = req.params;
+  const { status } = req.body;
+
+  if (status === null) {
+    res.status(400).send({ error: "Status is required" });
+    return;
+  }
+
+  depositAccModel.getdepositAccByAccNo(deposit_acc_no, (error, deposit_acc) => {
+    if (error) {
+      res.status(500).send({ error: "Error fetching data from the database" });
+      return;
+    }
+
+    if (!deposit_acc[0]) {
+      res.status(404).send({ error: "Deposit Account not found" });
+      return;
+    }
+
+    depositAccModel.updatestatus(deposit_acc_no, status, (error, results) => {
+      if (error) {
+        res
+          .status(500)
+          .send({ error: "Error updating Status in the database" });
+        return;
+      }
+
+      res.status(200).send({ message: "Status Updated successfully" });
+    });
+  });
+};
+
 module.exports = {
   addDepositAcc,
   updateDepositAcc,
@@ -215,4 +248,5 @@ module.exports = {
   permanentDeleteDepoAcc,
   getAlldepositAccs,
   getdepositAccByAccNo,
+  changeStatus,
 };

@@ -17,6 +17,10 @@ const customerModel = {
       getCustomerByemail(customer_email, callback) {
         connection.query('SELECT * FROM customer WHERE customer_email = ? AND is_delete = 0', [customer_email], callback);
       },
+
+      getCustomerBynic(customer_nic, callback) {
+        connection.query('SELECT * FROM customer WHERE customer_nic = ? AND is_delete = 0', [customer_nic], callback);
+      },
     
 
     addCustomer(customer, callback) {
