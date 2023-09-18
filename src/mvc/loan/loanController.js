@@ -33,202 +33,146 @@ const getLoanById = (req, res) => {
 };
 
 const addLoan = (req, res) => {
-    const { loan } = req.body;
-    const { customer } = req.body;
-    const { deposit } = req.body;
-    const { guarantor } = req.body;
+  const { loan, customer, deposit, guarantor } = req.body;
 
-    CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
+  // Function to handle errors and send responses
+  const handleError = (statusCode, errorMessage) => {
+    res.status(statusCode).send({ error: errorMessage });
+  };
 
-        if (error) {
-            res.status(500).send({ error: "Error fetching data from the database" });
-            return;
-          }
+  // Function to create a new customer if not found
+  const createNewCustomer = (customer, callback) => {
+    customerModel.addCustomer(customer, (error, customer_id) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database");
+      }
 
-          if (customerResults.length === 0) { //customer not found
+      if (!customer_id) {
+        return handleError(500, "Failed to create customer");
+      }
 
-            customerModel.addCustomer(customer, (error, customer_id) => {
-                if (error) {
-                  return res.status(500).send({ error: "Error fetching data from the database" });
-                }
-            
-                if (!customer_id) {
-                  return res.status(500).send({ error: "Failed to create customer" });
-                }
-            
-                depositAccModel.adddepositAcc(customer_id, deposit, (error, deposit_acc_no) => {
-                  if (error) {
-                    return res.status(500).send({ error: "Error fetching data from the database" });
-                  }
-            
-                  if (!deposit_acc_no) {
-                    return res.status(404).send({ error: "Failed to create Deposit Account" });
-                  }
-            
-                  GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
-
-                    if (error) {
-                        res.status(500).send({ error: "Error fetching data from the database" });
-                        return;
-                      }
-
-                        if (guarantorResults.length === 0) { //guarantor not found
-                      
-                            GuarantorModel.addGuarantor(guarantor, (error, guarantor_id) => {
-                                if (error) {
-                                  return res.status(500).send({ error: "Error fetching data from the database" });
-                                }
-                        
-                                if (!guarantor_id) {
-                                  return res.status(500).send({ error: "Failed to create Guarantor" });
-                                }
-                        
-                                loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
-                                  if (error) {
-                                    return res.status(500).send({ error: "Error fetching data from the database" });
-                                  }
-                        
-                                  if (results.length > 0) {
-                                    return res.status(409).send({ error: "This Business Name already has a Loan" });
-                                  }
-                        
-                                  loanModel.addLoan(customer_id, deposit_acc_no, guarantor_id, loan, (error, loan_id) => {
-                                    if (error) {
-                                      return res.status(500).send({ error: "Error fetching data from the database" });
-                                    }
-                        
-                                    if (!loan_id) {
-                                      return res.status(404).send({ error: "Failed to create Loan" });
-                                    }
-                        
-                                    return res.status(200).send({ message: "Loan created successfully", loan_id });
-                                  });
-                                });
-                              });
-                    
-                        }else{ //guarantor found
-                            
-                                const guarantorId = guarantorResults[0].guarantor_id;
-                            
-                                loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
-
-                                    if (error) {
-                                      return res.status(500).send({ error: "Error fetching data from the database" });
-                                    }
-                          
-                                    if (results.length > 0) {
-                                      return res.status(409).send({ error: "This Business Name already has a Loan" });
-                                    }
-                          
-                                    loanModel.addLoan(customer_id, deposit_acc_no, guarantorId , loan, (error, loan_id) => {
-                                      if (error) {
-                                        return res.status(500).send({ error: "Error fetching data from the database" });
-                                      }
-                          
-                                      if (!loan_id) {
-                                        return res.status(404).send({ error: "Failed to create Loan" });
-                                      }
-                          
-                                      return res.status(200).send({ message: "Loan created successfully", loan_id });
-                                    });
-                                });                               
-                        }
-                });
-                });
-              });
-
-          }else{ //customer found
-                
-            const customerId = customerResults[0].customer_id;
-                    
-            depositAccModel.getdepositAccBycustId(customerId, (error, depositresults) => {
-
-                if (error) {
-                  res.status(500).send({ error: "Error fetching data from the database" });
-                  return;
-                }
-
-                if (depositresults.length === 0) {
-                    res.status(409).send({ error: "This customer not having Deposit Account" });
-                    return;
-                  }
-            
-                const depositId = depositresults[0].deposit_acc_no;
-
-                GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
-
-                    if (error) {
-                        res.status(500).send({ error: "Error fetching data from the database" });
-                        return;
-                      }
-
-                        if (guarantorResults.length === 0) { //guarantor not found
-                      
-                            GuarantorModel.addGuarantor(guarantor, (error, guarantor_id) => {
-                                if (error) {
-                                  return res.status(500).send({ error: "Error fetching data from the database" });
-                                }
-                        
-                                if (!guarantor_id) {
-                                  return res.status(500).send({ error: "Failed to create Guarantor" });
-                                }
-                        
-                                loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
-                                  if (error) {
-                                    return res.status(500).send({ error: "Error fetching data from the database" });
-                                  }
-                        
-                                  if (results.length > 0) {
-                                    return res.status(409).send({ error: "This Business Name already has a Loan" });
-                                  }
-                        
-                                  loanModel.addLoan(customerId, depositId, guarantor_id, loan, (error, loan_id) => {
-                                    if (error) {
-                                      return res.status(500).send({ error: "Error fetching data from the database" });
-                                    }
-                        
-                                    if (!loan_id) {
-                                      return res.status(404).send({ error: "Failed to create Loan" });
-                                    }
-                        
-                                    return res.status(200).send({ message: "Loan created successfully", loan_id });
-                                  });
-                                });
-                              });
-                    
-                        }else{ //guarantor found
-                            
-                                const guarantorId = guarantorResults[0].guarantor_id;
-                            
-                                loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
-
-                                    if (error) {
-                                      return res.status(500).send({ error: "Error fetching data from the database" });
-                                    }
-                          
-                                    if (results.length > 0) {
-                                      return res.status(409).send({ error: "This Business Name already has a Loan" });
-                                    }
-                          
-                                    loanModel.addLoan(customerId, depositId, guarantorId, loan, (error, loan_id) => {
-                                      if (error) {
-                                        return res.status(500).send({ error: "Error fetching data from the database" });
-                                      }
-                          
-                                      if (!loan_id) {
-                                        return res.status(404).send({ error: "Failed to create Loan" });
-                                      }
-                          
-                                      return res.status(200).send({ message: "Loan created successfully", loan_id });
-                                    });
-                                });                               
-                        }
-                });
-            });               
-          }
+      callback(customer_id);
     });
-}
-  
+  };
+
+  // Function to create a new guarantor if not found
+  const createNewGuarantor = (guarantor, callback) => {
+    GuarantorModel.addGuarantor(guarantor, (error, guarantor_id) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database");
+      }
+
+      if (!guarantor_id) {
+        return handleError(500, "Failed to create Guarantor");
+      }
+
+      callback(guarantor_id);
+    });
+  };
+
+  // Function to create a new deposit account
+  const createDepositAccount = (customer_id, deposit, callback) => {
+    depositAccModel.adddepositAcc(customer_id, deposit, (error, deposit_acc_no) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database");
+      }
+
+      if (!deposit_acc_no) {
+        return handleError(404, "Failed to create Deposit Account");
+      }
+
+      callback(deposit_acc_no);
+    });
+  };
+
+  // Function to create a new loan
+  const createNewLoan = (customer_id, deposit_acc_no, guarantor_id) => {
+    loanModel.addLoan(customer_id, deposit_acc_no, guarantor_id, loan, (error, loan_id) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database");
+      }
+
+      if (!loan_id) {
+        return handleError(404, "Failed to create Loan");
+      }
+
+      res.status(200).send({ message: "Loan created successfully", loan_id });
+    });
+  };
+
+  CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
+    if (error) {
+      return handleError(500, "Error fetching data from the database");
+    }
+
+    if (customerResults.length === 0) {
+      createNewCustomer(customer, (customer_id) => {
+        createDepositAccount(customer_id, deposit, (deposit_acc_no) => {
+          GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
+            if (error) {
+              return handleError(500, "Error fetching data from the database");
+            }
+
+            if (guarantorResults.length === 0) {
+              createNewGuarantor(guarantor, (guarantor_id) => {
+                checkAndCreateLoan(customer_id, deposit_acc_no, guarantor_id);
+              });
+            } else {
+              checkAndCreateLoan(customer_id, deposit_acc_no, guarantorResults[0].guarantor_id);
+            }
+          });
+        });
+      });
+    } else {
+      const customerId = customerResults[0].customer_id;
+      depositAccModel.getdepositAccBycustId(customerId, (error, depositresults) => {
+        if (error) {
+          return handleError(500, "Error fetching data from the database");
+        }
+
+        if (depositresults.length === 0) {
+          return handleError(409, "This customer does not have a Deposit Account");
+        }
+
+        const depositId = depositresults[0].deposit_acc_no;
+
+        GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
+          if (error) {
+            return handleError(500, "Error fetching data from the database");
+          }
+
+          if (guarantorResults.length === 0) {
+            createNewGuarantor(guarantor, (guarantor_id) => {
+              checkAndCreateLoan(customerId, depositId, guarantor_id);
+            });
+          } else {
+            checkAndCreateLoan(customerId, depositId, guarantorResults[0].guarantor_id);
+          }
+        });
+      });
+    }
+  });
+
+  // Function to check and create a loan
+  const checkAndCreateLoan = (customer_id, deposit_acc_no, guarantor_id) => {
+    loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database");
+      }
+
+      if (results.length > 0) {
+        return handleError(409, "This Business Name already has a Loan");
+      }
+
+      createNewLoan(customer_id, deposit_acc_no, guarantor_id);
+    });
+  };
+};
+
+// Example usage:
+// POST /addLoan with the loan data in the request body
+
+
 
 // const updateLoan = (req, res) => {
 //     const { loan_id } = req.params;
@@ -253,37 +197,37 @@ const addLoan = (req, res) => {
 //                     res.status(500).send({ error: 'Error fetching data from the database' });
 //                     return;
 //                 }
-      
+
 //                 if (results.length > 0) {
 //                     res.status(409).send({ error: 'This Business name is already exists' });
 //                     return;
 //                 }
-      
+
 //                 updateExistingLoan(loan, loan_id);
 //             });
 //         } else {
 //             updateExistingLoan(loan, loan_id);
 //         }
 //       });
-      
+
 //       function updateExistingLoan(loan, loan_id) {
 //         loanModel.updateLoan(loan, loan_id, (error, results) => {
 //             if (error) {
 //                 res.status(500).send({ error: 'Error fetching data from the database' });
 //                 return;
 //             }
-      
+
 //             if (results.affectedRows === 0) {
 //                 res.status(404).send({ error: 'Loan Details not found or no changes made' });
 //                 return;
 //             }
-      
+
 //             res.status(200).send({ message: 'Loan updated successfully' });
 //         });
 //       }};
 
 module.exports = {
-    addLoan,
-    getAllLoans,
-    getLoanById,
+  addLoan,
+  getAllLoans,
+  getLoanById,
 }
