@@ -8,6 +8,7 @@ const {
   deleteUserRole,
   permanentDeleteUserRole,
   deleteRoles,
+  addPermissiontoUserRole,
   permissionByroleid,
 } = require('../../mvc/userrole/UserroleController');
 const { authenticateToken } = require('../../middlewares/userAuth');
@@ -20,6 +21,7 @@ module.exports = (config) => {
 
   //super admin only
   router.post('/create', authorizeAccessSupoerAdmin, addUserRole);
+  router.put('/addpermissions/:userRoleId', authorizeAccessSupoerAdmin, addPermissiontoUserRole);
   router.get('/all', authorizeAccessSupoerAdmin, getAllUserRoles);
   router.get('/:userRoleId', authorizeAccessSupoerAdmin, getUserRoleById);
   router.put('/status/:userRoleId', authorizeAccessSupoerAdmin, updateUserRoleStatus);

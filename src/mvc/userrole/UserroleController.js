@@ -35,11 +35,9 @@ const permissionByroleid = (req, res) => {
 
     // Check if the user has the correct user role
     if (userRoleIds != userroleid) {
-      res
-        .status(404)
-        .send({
-          error: "UserRole is wrong. This user does not have this role",
-        });
+      res.status(404).send({
+        error: "UserRole is wrong. This user does not have this role",
+      });
       return;
     }
 
@@ -104,7 +102,7 @@ const addUserRole = (req, res) => {
   const { role, permisssionslist } = req.body;
 
   // Create the user role first
-  UserRoleModel.addUserRole({role}, (error, userRoleId) => {
+  UserRoleModel.addUserRole({ role }, (error, userRoleId) => {
     if (error) {
       res.status(500).send({ error: "Error fetching data from the database" });
       return;
@@ -145,6 +143,74 @@ const addUserRole = (req, res) => {
       .send({ message: "UserRole created successfully", userRoleId });
   });
 };
+
+const addPermissiontoUserRole = (req, res) => {
+  const { userRoleId } = req.params;
+  const { permissionsList } = req.body; // Corrected variable name
+
+  const failedPermissions = [];
+
+  UserRoleModel.getUserRoleById(userRoleId, (error, existingUserRole) => {
+    // Corrected variable name
+    if (error) {
+      res.status(500).send({ error: "Error fetching data from the database" });
+      return;
+    }
+
+    if (!existingUserRole[0]) {
+      res.status(404).send({ error: "UserRole not found" });
+      return;
+    }
+
+    // Use Promise.all to handle multiple asynchronous operations
+    const permissionPromises = permissionsList.map((permission) => {
+      return new Promise((resolve, reject) => {
+        PermissionGroupModel.getAssignPermissionByCode(
+          permission,
+          (error, existingAssignPermission) => {
+            if (error) {
+              reject("Error fetching data from the database");
+            } else if (!existingAssignPermission[0]) {
+              PermissionGroupModel.addAssignPermission(
+                userRoleId,
+                permission,
+                (error, assignPermissionId) => {
+                  if (error) {
+                    reject("Error fetching data from the database");
+                  } else if (!assignPermissionId) {
+                    failedPermissions.push(permission);
+                    reject("Failed to assign permission");
+                  } else {
+                    resolve(assignPermissionId);
+                  }
+                }
+              );
+            } else {
+              failedPermissions.push(permission);
+              resolve(); // Permission already exists, resolve without an error
+            }
+          }
+        );
+      });
+    });
+
+    // Wait for all promises to resolve or reject
+    Promise.all(permissionPromises)
+      .then((result) => {
+        // Send a success response after all permissions are processed
+        res.status(200).send({
+          message: "Permissions added successfully",
+          failedPermissions: failedPermissions,
+        });
+      })
+      .catch((error) => {
+        res.status(500).send({ error });
+      });
+  });
+};
+
+// Example usage:
+// POST /addPermissionToUserRole/1 with body { "permissionsList": ["permission1", "permission2"] }
 
 const updateUserRole = (req, res) => {
   const { userRoleId } = req.params;
@@ -349,4 +415,5 @@ module.exports = {
   permanentDeleteUserRole,
   deleteRoles,
   permissionByroleid,
+  addPermissiontoUserRole,
 };

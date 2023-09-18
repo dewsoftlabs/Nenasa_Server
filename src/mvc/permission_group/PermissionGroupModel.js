@@ -40,6 +40,10 @@ const AssignPermissionModel = {
     });
   },
 
+  getAssignPermissionByCode(assignPermissioncode, callback) {
+    connection.query('SELECT * FROM assign_permission WHERE permission_code = ? AND is_delete = 0', [assignPermissioncode], callback);
+  },
+
   updateAssignPermission(assignPermission, assignPermissionId, callback) {
     const { permission_code, status } = assignPermission;
 
