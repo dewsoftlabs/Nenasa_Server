@@ -146,71 +146,76 @@ const addUserRole = (req, res) => {
 
 const addPermissiontoUserRole = (req, res) => {
   const { userRoleId } = req.params;
-  const { permissionsList } = req.body; // Corrected variable name
+  const { permisssionslist } = req.body;
 
   const failedPermissions = [];
 
-  UserRoleModel.getUserRoleById(userRoleId, (error, existingUserRole) => {
-    // Corrected variable name
+  UserRoleModel.getUserRoleById(userRoleId, (error, existingUserrole) => {
     if (error) {
       res.status(500).send({ error: "Error fetching data from the database" });
       return;
     }
 
-    if (!existingUserRole[0]) {
+    if (!existingUserrole[0]) {
       res.status(404).send({ error: "UserRole not found" });
       return;
     }
-
-    // Use Promise.all to handle multiple asynchronous operations
-    const permissionPromises = permissionsList.map((permission) => {
-      return new Promise((resolve, reject) => {
-        PermissionGroupModel.getAssignPermissionByCode(
-          permission,
-          (error, existingAssignPermission) => {
-            if (error) {
-              reject("Error fetching data from the database");
-            } else if (!existingAssignPermission[0]) {
-              PermissionGroupModel.addAssignPermission(
-                userRoleId,
-                permission,
-                (error, assignPermissionId) => {
-                  if (error) {
-                    reject("Error fetching data from the database");
-                  } else if (!assignPermissionId) {
-                    failedPermissions.push(permission);
-                    reject("Failed to assign permission");
-                  } else {
-                    resolve(assignPermissionId);
-                  }
-                }
-              );
-            } else {
-              failedPermissions.push(permission);
-              resolve(); // Permission already exists, resolve without an error
-            }
+    // Loop through the permissions array and assign each permission
+    permisssionslist.values.forEach((permission) => {
+      PermissionGroupModel.getAssignPermissionByCode(
+        permission,
+        (error, existingUserrole) => {
+          if (error) {
+            res
+              .status(500)
+              .send({ error: "Error fetching data from the database" });
+            return;
           }
-        );
-      });
+
+          if (!existingUserrole[0]) {
+            PermissionGroupModel.addAssignPermission(
+              userRoleId,
+              permission,
+              (error, assignPermissionId) => {
+                if (error) {
+                  res
+                    .status(500)
+                    .send({ error: "Error fetching data from the database" });
+                  return;
+                }
+
+                if (!assignPermissionId) {
+                  failedPermissions.push(permission);
+                  res
+                    .status(404)
+                    .send({ error: "Failed to assign permission" });
+                  return;
+                }
+
+                // You can send a response for each permission assignment here if needed
+                // res.status(200).send({ message: 'Permission assigned successfully', assignPermissionId });
+              }
+            );
+          } else {
+            res
+              .status(404)
+              .send({ error: "Permission" + permission + " is already here" });
+            return;
+          }
+        }
+      );
     });
 
-    // Wait for all promises to resolve or reject
-    Promise.all(permissionPromises)
-      .then((result) => {
-        // Send a success response after all permissions are processed
-        res.status(200).send({
-          message: "Permissions added successfully",
-          failedPermissions: failedPermissions,
-        });
+    // Send a success response after all permissions are assigned
+    res;
+    let values = failedPermissions
+      .forEach((permission) => {
+        return assignPermission(permission);
       })
-      .catch((error) => {
-        res.status(500).send({ error });
-      });
+      .status(200)
+      .send({ message: "Permission Adding successfully", values });
   });
 };
-
-// Example usage:
-// POST /addPermissionToUserRole/1 with body { "permissionsList": ["permission1", "permission2"] }
 
 const updateUserRole = (req, res) => {
   const { userRoleId } = req.params;
