@@ -160,26 +160,42 @@ const addPermissiontoUserRole = (req, res) => {
     }
     // Loop through the permissions array and assign each permission
     permisssionslist.values.forEach((permission) => {
-      PermissionGroupModel.addAssignPermission(
-        userRoleId,
-        permission,
-        (error, assignPermissionId) => {
-          if (error) {
-            res
-              .status(500)
-              .send({ error: "Error fetching data from the database" });
-            return;
-          }
-
-          if (!assignPermissionId) {
-            res.status(404).send({ error: "Failed to assign permission" });
-            return;
-          }
-
-          // You can send a response for each permission assignment here if needed
-          // res.status(200).send({ message: 'Permission assigned successfully', assignPermissionId });
+      UserRoleModel.getUserRoleById(userRoleId, (error, existingUserrole) => {
+        if (error) {
+          res
+            .status(500)
+            .send({ error: "Error fetching data from the database" });
+          return;
         }
-      );
+
+        if (!existingUserrole[0]) {
+          res.status(404).send({ error: "UserRole not found" });
+          return;
+        }
+
+        console.log(permisssionslist)
+
+        PermissionGroupModel.addAssignPermission(
+          userRoleId,
+          permission,
+          (error, assignPermissionId) => {
+            if (error) {
+              res
+                .status(500)
+                .send({ error: "Error fetching data from the database" });
+              return;
+            }
+
+            if (!assignPermissionId) {
+              res.status(404).send({ error: "Failed to assign permission" });
+              return;
+            }
+
+            // You can send a response for each permission assignment here if needed
+            // res.status(200).send({ message: 'Permission assigned successfully', assignPermissionId });
+          }
+        );
+      });
     });
 
     // Send a success response after all permissions are assigned
@@ -392,5 +408,5 @@ module.exports = {
   permanentDeleteUserRole,
   deleteRoles,
   permissionByroleid,
-  addPermissiontoUserRole
+  addPermissiontoUserRole,
 };
