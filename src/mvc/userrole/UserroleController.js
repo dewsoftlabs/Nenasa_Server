@@ -194,7 +194,7 @@ const addPermissiontoUserRole = (req, res) => {
               }
             );
           } else {
-            res.status(404).send({ error: "Permission not found" });
+            res.status(404).send({ error: "UserRole not found" });
             return;
           }
         }
