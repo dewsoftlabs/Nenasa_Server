@@ -160,9 +160,10 @@ const addPermissiontoUserRole = (req, res) => {
     }
     // Loop through the permissions array and assign each permission
     permisssionslist.values.forEach((permission) => {
-      PermissionGroupModel.getAssignPermissionByCode(
+      PermissionGroupModel.addAssignPermission(
+        userRoleId,
         permission,
-        (error, existingUserrole) => {
+        (error, assignPermissionId) => {
           if (error) {
             res
               .status(500)
@@ -170,33 +171,13 @@ const addPermissiontoUserRole = (req, res) => {
             return;
           }
 
-          if (!existingUserrole[0]) {
-            PermissionGroupModel.addAssignPermission(
-              userRoleId,
-              permission,
-              (error, assignPermissionId) => {
-                if (error) {
-                  res
-                    .status(500)
-                    .send({ error: "Error fetching data from the database" });
-                  return;
-                }
-
-                if (!assignPermissionId) {
-                  res
-                    .status(404)
-                    .send({ error: "Failed to assign permission" });
-                  return;
-                }
-
-                // You can send a response for each permission assignment here if needed
-                // res.status(200).send({ message: 'Permission assigned successfully', assignPermissionId });
-              }
-            );
-          } else {
-            res.status(404).send({ error: "UserRole not found" });
+          if (!assignPermissionId) {
+            res.status(404).send({ error: "Failed to assign permission" });
             return;
           }
+
+          // You can send a response for each permission assignment here if needed
+          // res.status(200).send({ message: 'Permission assigned successfully', assignPermissionId });
         }
       );
     });
@@ -411,5 +392,5 @@ module.exports = {
   permanentDeleteUserRole,
   deleteRoles,
   permissionByroleid,
-  addPermissiontoUserRole,
+  addPermissiontoUserRole
 };
