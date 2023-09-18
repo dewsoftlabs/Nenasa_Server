@@ -148,8 +148,6 @@ const addPermissiontoUserRole = (req, res) => {
   const { userRoleId } = req.params;
   const { permisssionslist } = req.body;
 
-  const failedPermissions = [];
-
   UserRoleModel.getUserRoleById(userRoleId, (error, existingUserrole) => {
     if (error) {
       res.status(500).send({ error: "Error fetching data from the database" });
@@ -185,7 +183,6 @@ const addPermissiontoUserRole = (req, res) => {
                 }
 
                 if (!assignPermissionId) {
-                  failedPermissions.push(permission);
                   res
                     .status(404)
                     .send({ error: "Failed to assign permission" });
@@ -197,9 +194,7 @@ const addPermissiontoUserRole = (req, res) => {
               }
             );
           } else {
-            res
-              .status(404)
-              .send({ error: "Permission" + permission + " is already here" });
+            res.status(404).send({ error: "Permission"+ permission +" is already here" });
             return;
           }
         }
@@ -207,13 +202,9 @@ const addPermissiontoUserRole = (req, res) => {
     });
 
     // Send a success response after all permissions are assigned
-    res;
-    let values = failedPermissions
-      .forEach((permission) => {
-        return assignPermission(permission);
-      })
+    res
       .status(200)
-      .send({ message: "Permission Adding successfully", values });
+      .send({ message: "UserRole created successfully", userRoleId });
   });
 };
 
