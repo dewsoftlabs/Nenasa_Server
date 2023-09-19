@@ -304,7 +304,7 @@ const deleteUserRole = (req, res) => {
       return;
     }
 
-    UserRoleModel.deleteUserRole(userRoleId, 1, (error, results) => {
+    PermissionGroupModel.deleteAssignPermissionByRoleId(userRoleId, (error, results) => {
       if (error) {
         res
           .status(500)
@@ -312,7 +312,16 @@ const deleteUserRole = (req, res) => {
         return;
       }
 
-      res.status(200).send({ message: "UserRole deleted successfully" });
+      UserRoleModel.deleteUserRole(userRoleId, 1, (error, results) => {
+        if (error) {
+          res
+            .status(500)
+            .send({ error: "Error updating deletion in the database" });
+          return;
+        }
+
+        res.status(200).send({ message: "Userrole deleted successfully" });
+      });
     });
   });
 };

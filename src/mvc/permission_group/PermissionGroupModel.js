@@ -67,6 +67,14 @@ const AssignPermissionModel = {
     connection.query(query, values, callback);
   },
 
+  deleteAssignPermissionByRoleId(userroleid, callback) {
+    const query = 'DELETE FROM assign_permission WHERE userroleid = ?';
+    const values = [userroleid];
+
+    connection.query(query, values, callback);
+  },
+
+
   deleteAssignPermissions(assignPermissionIds, callback) {
     if (!Array.isArray(assignPermissionIds)) {
       assignPermissionIds = [assignPermissionIds]; // Convert to array if it's a single assignPermissionId
