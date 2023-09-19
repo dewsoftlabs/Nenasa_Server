@@ -20,8 +20,8 @@ module.exports = (config) => {
   router.get('/all', authorizeAccessControll, getAllBranches);
   router.get('/:branchId', authorizeAccessControll, getBranchById);
   router.put('/status/:branchId', authorizeAccessControll, updateBranchStatus);
-  router.put('/delete/:branchId', authorizeAccessControll, deleteBranch);
-  router.put('/delete', authorizeAccessControll, deleteBranches);
+  router.delete('/delete/:branchId', authorizeAccessControll, deleteBranch);
+  router.delete('/delete', authorizeAccessControll, deleteBranches);
   router.put('/update/:branchId', authorizeAccessControll, updateBranch);
 
   return router;
