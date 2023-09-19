@@ -28,7 +28,7 @@ const tableInfo = [
     tableName: 'shop',
     fields: [
       { name: 'shopname', type: 'VARCHAR(255)' },
-      { name: 'shopnphonenumber', type: 'VARCHAR(10)' },
+      { name: 'shopnphonenumber', type: 'VARCHAR(15)' },
       { name: 'address', type: 'VARCHAR(255)' },
       { name: 'email', type: 'VARCHAR(255)' },
       { name: 'website', type: 'VARCHAR(255)' },
