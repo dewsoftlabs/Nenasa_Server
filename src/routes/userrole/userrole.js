@@ -25,7 +25,7 @@ module.exports = (config) => {
   router.get('/all', authorizeAccessSupoerAdmin, getAllUserRoles);
   router.get('/:userRoleId', authorizeAccessSupoerAdmin, getUserRoleById);
   router.put('/status/:userRoleId', authorizeAccessSupoerAdmin, updateUserRoleStatus);
-  router.put('/delete/:userRoleId', authorizeAccessSupoerAdmin, deleteUserRole);
+  router.delete('/delete/:userRoleId', authorizeAccessSupoerAdmin, deleteUserRole);
   router.put('/delete', authorizeAccessSupoerAdmin, deleteRoles);
   router.put('/update/:userRoleId', authorizeAccessSupoerAdmin, updateUserRole);
 

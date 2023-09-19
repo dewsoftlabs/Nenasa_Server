@@ -15,10 +15,10 @@ module.exports = (config) => {
     const router = express.Router();
 
     //admin only
-    // router.post('/create', authorizeAccessControll, addShop);
+    router.post('/create', authorizeAccessControll, addShop);
     router.get('/all', authenticateToken, getShop);
     router.put('/update', authorizeAccessControll, updateShop);
-    router.put('/logo', uploadLogo.single('logo'), authorizeAccessControll, updateLogo);
+    router.put('/updatelogo', uploadLogo.single('logo'), authorizeAccessControll, updateLogo);
     router.use('/getlogo', express.static('src/uploads/shop/'));
     router.get('/getdata',getshopData);
 

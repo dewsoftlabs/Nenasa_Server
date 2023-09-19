@@ -98,7 +98,12 @@ const updateShop = (req, res) => {
 
 const updateLogo = (req, res) => {
 
+    if (!req.file) {
+        return res.status(400).send({ error: 'No logo file uploaded' });
+      }
+
     const filePath = req.file.filename; // Get the uploaded file filename
+    console.log(req.file);
 
     ShopModel.updateLogo(filePath, (error, results) => {
         if (error) {
