@@ -98,7 +98,7 @@ const updateShop = (req, res) => {
 
 const updateLogo = (req, res) => {
 
-    const filePath = req.file; // Get the uploaded file filename
+    const filePath = req.file.filename; // Get the uploaded file filename
     console.log(req.file);
 
     ShopModel.updateLogo(filePath, (error, results) => {
