@@ -36,6 +36,27 @@ const getCustomerById = (req, res) => {
   });
 };
 
+const getCustomerDetailsByNIC = (req, res) => {
+  const { customer_nic } = req.params;
+
+  CustomerModel.getCustomerBynic(customer_nic, (error, customerResults) => {
+    if (error) {
+      return handleError(500, "Error fetching data from the database");
+    }
+
+    const customerId = customerResults[0].customer_id;
+
+        CustomerModel.getCustomerDetailsByID(customerId, (error, results) => {
+          if (error) {
+            res.status(500).send({ error: "Error fetching data from the database" });
+            return;
+          }
+      
+          res.status(200).send(results);
+        });
+  });
+};
+
 const addCustomer = (req, res) => {
   const customer = req.body; // Retrieve the user data from the request body
 
@@ -308,7 +329,7 @@ const deleteCustomer = (req, res) => {
 const updateCustomerStatus = (req, res) => {
 
   const { customer_id } = req.params;
-  const { status } = req.body;
+  const { customer_status } = req.body;
 
   CustomerModel.getCustomerById(customer_id, (error, results) => {
     if (error) {
@@ -321,7 +342,7 @@ const updateCustomerStatus = (req, res) => {
       return;
     }
 
-    CustomerModel.updateCustomerstatus(customer_id, status, (error, results) => {
+    CustomerModel.updateCustomerstatus(customer_id, customer_status, (error, results) => {
       if (error) {
         res
           .status(500)
@@ -342,4 +363,5 @@ module.exports = {
   deleteCustomers,
   deleteCustomer,
   updateCustomerStatus,
+  getCustomerDetailsByNIC,
 };

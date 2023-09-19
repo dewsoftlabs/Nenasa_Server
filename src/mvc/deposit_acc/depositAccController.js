@@ -209,9 +209,9 @@ const permanentDeleteDepoAcc = (req, res) => {
 
 const changeStatus = (req, res) => {
   const { deposit_acc_no } = req.params;
-  const { status } = req.body;
+  const { deposit_status } = req.body;
 
-  if (status === null) {
+  if (deposit_status === null) {
     res.status(400).send({ error: "Status is required" });
     return;
   }
@@ -227,7 +227,7 @@ const changeStatus = (req, res) => {
       return;
     }
 
-    depositAccModel.updatestatus(deposit_acc_no, status, (error, results) => {
+    depositAccModel.updatestatus(deposit_acc_no, deposit_status, (error, results) => {
       if (error) {
         res
           .status(500)

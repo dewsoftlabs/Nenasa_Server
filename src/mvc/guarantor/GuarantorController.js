@@ -314,7 +314,7 @@ const getAllGuarantors = (req, res) => {
   const updateGuarantorStatus = (req, res) => {
 
     const { guarantor_id } = req.params;
-    const { status } = req.body;
+    const { guarantor_status } = req.body;
   
     GuarantorModel.getGuarantorById(guarantor_id, (error, results) => {
       if (error) {
@@ -327,7 +327,7 @@ const getAllGuarantors = (req, res) => {
         return;
       }
   
-      GuarantorModel.updateGuarantorstatus(guarantor_id, status, (error, results) => {
+      GuarantorModel.updateGuarantorstatus(guarantor_id, guarantor_status, (error, results) => {
         if (error) {
           res
             .status(500)

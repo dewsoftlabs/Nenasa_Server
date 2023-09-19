@@ -21,16 +21,37 @@ const customerModel = {
       getCustomerBynic(customer_nic, callback) {
         connection.query('SELECT * FROM customer WHERE customer_nic = ? AND is_delete = 0', [customer_nic], callback);
       },
+
+      getCustomerDetailsByID(customer_id, callback) {
+
+        const query = `
+            SELECT
+              c.*,
+              d.*,
+              l.*,
+              g.*,
+              b.*
+            FROM customer AS c
+            LEFT JOIN deposit_acc AS d ON c.customer_id = d.customer_id
+            LEFT JOIN loan AS l ON c.customer_id = l.customer_id
+            LEFT JOIN guarantor AS g ON l.guarantor_id = g.guarantor_id
+            LEFT JOIN branch AS b ON c.branchid = b.branchid
+            WHERE c.customer_id = ? 
+              AND c.is_delete = 0 ;
+          `;
     
+        connection.query(query, [customer_id], callback);
+      },
+         
 
     addCustomer(customer, callback) {
-        const { customer_name,customer_phone,customer_email , customer_address ,customer_gender , customer_nic } = customer;
+        const { customer_name,customer_phone,customer_email , customer_address ,customer_gender , customer_nic , branchid} = customer;
         const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const defaultValues = 0;
         const activeValues = 1;
     
-        const query = 'INSERT INTO customer (customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic ,trndate, status, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ? , ?)';
-        const values = [customer_name,customer_phone,customer_email, customer_address , customer_gender , customer_nic , trndate, activeValues, defaultValues];
+        const query = 'INSERT INTO customer (customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic , branchid , trndate, customer_status, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ?, ? , ?)';
+        const values = [customer_name,customer_phone,customer_email, customer_address , customer_gender , customer_nic , branchid , trndate, activeValues, defaultValues];
     
         connection.query(query, values, (error, results) => {
           if (error) {
@@ -44,9 +65,9 @@ const customerModel = {
       },
 
       updateCustomer(customer, customer_id, callback) {
-        const { customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic , status } = customer;
-        const query = 'UPDATE customer SET customer_name = ?, customer_phone = ?, customer_email = ?, customer_address = ?, customer_gender = ? , customer_nic = ? , status = ? WHERE customer_id = ?';
-        const values = [customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic , status, customer_id];
+        const { customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic , branchid ,customer_status } = customer;
+        const query = 'UPDATE customer SET customer_name = ?, customer_phone = ?, customer_email = ?, customer_address = ?, customer_gender = ? , customer_nic = ? , branchid = ? , customer_status = ? WHERE customer_id = ?';
+        const values = [customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic , branchid , customer_status, customer_id];
     
         connection.query(query, values, callback);
       },
@@ -99,9 +120,9 @@ const customerModel = {
         }
       } ,
 
-      updateCustomerstatus(customerid, status, callback) {
-        const query = 'UPDATE customer SET status = ? WHERE customer_id = ?';
-        const values = [status, customerid];
+      updateCustomerstatus(customerid, customer_status, callback) {
+        const query = 'UPDATE customer SET customer_status = ? WHERE customer_id = ?';
+        const values = [customer_status, customerid];
     
         connection.query(query, values, callback);
       },

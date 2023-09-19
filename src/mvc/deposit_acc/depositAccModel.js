@@ -14,13 +14,13 @@ const depositAccModel = {
   },
 
   adddepositAcc(customer_id ,deposit_acc, callback) {
-    const { depositType_id , hold_startDate, hold_period } = deposit_acc;
+    const { depositType_id , hold_startDate, hold_period , branchid } = deposit_acc;
     const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const defaultValues = 0;
     const activeValues = 1;
 
-    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , status ,hold_startDate , hold_period ,trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    const values = [customer_id, depositType_id , activeValues ,hold_startDate, hold_period , trndate,  defaultValues];
+    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , deposit_status ,hold_startDate , hold_period , branchid , trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ?)";
+    const values = [customer_id, depositType_id , activeValues ,hold_startDate, hold_period , branchid , trndate,  defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {
@@ -34,13 +34,13 @@ const depositAccModel = {
   },
 
   adddepositAccDirect(deposit_acc, callback) {
-    const { customer_id , depositType_id , hold_startDate, hold_period } = deposit_acc;
+    const { customer_id , depositType_id , hold_startDate, hold_period , branchid } = deposit_acc;
     const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const defaultValues = 0;
     const activeValues = 1;
 
-    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , status ,hold_startDate , hold_period ,trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    const values = [customer_id, depositType_id , activeValues ,hold_startDate, hold_period , trndate,  defaultValues];
+    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , deposit_status ,hold_startDate , hold_period , branchid , trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ?)";
+    const values = [customer_id, depositType_id , activeValues ,hold_startDate, hold_period , branchid , trndate,  defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {
@@ -54,15 +54,15 @@ const depositAccModel = {
   },
 
   updatedepositAcc(deposit_acc, deposit_acc_no, callback) {
-    const { hold_startDate, hold_period , customer_id , depositType_id } = deposit_acc;
-    const query = "UPDATE deposit_acc SET hold_startDate = ? ,  hold_period = ? , customer_id = ? , depositType_id = ? WHERE deposit_acc_no = ?";
-    const values = [hold_startDate, hold_period, deposit_acc_no , customer_id , depositType_id];
+    const { hold_startDate, hold_period , customer_id , depositType_id , branchid} = deposit_acc;
+    const query = "UPDATE deposit_acc SET hold_startDate = ? ,  hold_period = ? , customer_id = ? , depositType_id = ? , branchid = ? WHERE deposit_acc_no = ?";
+    const values = [hold_startDate, hold_period, deposit_acc_no , customer_id , depositType_id , branchid];
     connection.query(query, values, callback);
   },
 
-  updatestatus(deposit_acc_no, status, callback) {
-    const query = 'UPDATE deposit_acc SET status = ? WHERE deposit_acc_no = ?';
-    const values = [status, deposit_acc_no];
+  updatestatus(deposit_acc_no, deposit_status, callback) {
+    const query = 'UPDATE deposit_acc SET deposit_status = ? WHERE deposit_acc_no = ?';
+    const values = [deposit_status, deposit_acc_no];
 
     connection.query(query, values, callback);
   },

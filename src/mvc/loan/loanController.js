@@ -100,6 +100,8 @@ const addLoan = (req, res) => {
     });
   };
 
+  //model
+
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
     if (error) {
       return handleError(500, "Error fetching data from the database");
@@ -169,62 +171,6 @@ const addLoan = (req, res) => {
   };
 };
 
-// Example usage:
-// POST /addLoan with the loan data in the request body
-
-
-
-// const updateLoan = (req, res) => {
-//     const { loan_id } = req.params;
-//     const loan = req.body;
-
-//     loanModel.getloanById(loan_id, (error,existingloan) => {
-//         if (error) {
-//             res.status(500).send({ error: 'Error fetching data from the database' });
-//             return;
-//         }
-
-//         if (!existingloan[0]) {
-//             res.status(404).send({ error: 'Loan Details not found' });
-//             return;
-//         }
-
-//         if (loan.business_name && loan.business_name  !== existingloan[0].business_name) { 
-
-
-//             loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
-//                 if (error) {
-//                     res.status(500).send({ error: 'Error fetching data from the database' });
-//                     return;
-//                 }
-
-//                 if (results.length > 0) {
-//                     res.status(409).send({ error: 'This Business name is already exists' });
-//                     return;
-//                 }
-
-//                 updateExistingLoan(loan, loan_id);
-//             });
-//         } else {
-//             updateExistingLoan(loan, loan_id);
-//         }
-//       });
-
-//       function updateExistingLoan(loan, loan_id) {
-//         loanModel.updateLoan(loan, loan_id, (error, results) => {
-//             if (error) {
-//                 res.status(500).send({ error: 'Error fetching data from the database' });
-//                 return;
-//             }
-
-//             if (results.affectedRows === 0) {
-//                 res.status(404).send({ error: 'Loan Details not found or no changes made' });
-//                 return;
-//             }
-
-//             res.status(200).send({ message: 'Loan updated successfully' });
-//         });
-//       }};
 
 module.exports = {
   addLoan,

@@ -20,7 +20,7 @@ const BranchModel = {
     const defaultValues = 0;
     const activeValues = 1;
 
-    const query = 'INSERT INTO branch (branch_name, branch_location, trndate, status, is_delete) VALUES (?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO branch (branch_name, branch_location, trndate, branch_status, is_delete) VALUES (?, ?, ?, ?, ?)';
     const values = [branch_name, branch_location, trndate, activeValues, defaultValues];
 
     connection.query(query, values, (error, results) => {
@@ -35,16 +35,16 @@ const BranchModel = {
   },
 
   updateBranch(branch, branchId, callback) {
-    const { branch_name, branch_location, status } = branch;
-    const query = 'UPDATE branch SET branch_name = ?, branch_location = ?, status = ? WHERE branchid = ?';
-    const values = [branch_name, branch_location, status, branchId];
+    const { branch_name, branch_location, branch_status } = branch;
+    const query = 'UPDATE branch SET branch_name = ?, branch_location = ?, branch_status = ? WHERE branchid = ?';
+    const values = [branch_name, branch_location, branch_status, branchId];
 
     connection.query(query, values, callback);
   },
 
-  updateBranchStatus(branchId, status, callback) {
-    const query = 'UPDATE branch SET status = ? WHERE branchid = ?';
-    const values = [status, branchId];
+  updateBranchStatus(branchId, branch_status, callback) {
+    const query = 'UPDATE branch SET branch_status = ? WHERE branchid = ?';
+    const values = [branch_status, branchId];
 
     connection.query(query, values, callback);
   },

@@ -8,7 +8,7 @@ const {
     deleteCustomers,
     deleteCustomer,
     updateCustomerStatus,
-    
+    getCustomerDetailsByNIC,
 
 } = require ('../../mvc/customer/CustomerController');
 
@@ -25,7 +25,7 @@ module.exports = (config) => {
     router.put('/update/:customer_id', authorizeAccessControll,updateCustomer);
     router.put('/delete/:customer_id', authorizeAccessControll,deleteCustomer);
     router.put('/delete', authorizeAccessControll,deleteCustomers);
-
+    router.get('/customerDetails/:customer_nic', authorizeAccessControll , getCustomerDetailsByNIC);
   
     return router;
   };

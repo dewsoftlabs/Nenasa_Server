@@ -23,13 +23,13 @@ const GuarantorModel = {
       },
 
     addGuarantor(guarantor, callback) {
-        const { guarantor_name,guarantor_phone,guarantor_email , guarantor_address , guarantor_nic } = guarantor;
+        const { guarantor_name,guarantor_phone,guarantor_email , guarantor_address , guarantor_nic ,branchid } = guarantor;
         const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const defaultValues = 0;
         const activeValues = 1;
     
-        const query = 'INSERT INTO guarantor (guarantor_name, guarantor_phone, guarantor_email, guarantor_address  , guarantor_nic ,trndate, status, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ? )';
-        const values = [guarantor_name,guarantor_phone,guarantor_email, guarantor_address  , guarantor_nic , trndate, activeValues, defaultValues];
+        const query = 'INSERT INTO guarantor (guarantor_name, guarantor_phone, guarantor_email, guarantor_address  , guarantor_nic , branchid , trndate, guarantor_status, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ? , ? )';
+        const values = [guarantor_name,guarantor_phone,guarantor_email, guarantor_address  , guarantor_nic , branchid, trndate, activeValues, defaultValues];
     
         connection.query(query, values, (error, results) => {
           if (error) {
@@ -43,9 +43,9 @@ const GuarantorModel = {
       },
 
       updateGuarantor(guarantor, guarantor_id, callback) {
-        const { guarantor_name, guarantor_phone, guarantor_email , guarantor_address , guarantor_nic , status } = guarantor;
-        const query = 'UPDATE guarantor SET guarantor_name = ?, guarantor_phone = ?, guarantor_email = ? , guarantor_address = ? , guarantor_nic = ? , status = ? WHERE guarantor_id = ?';
-        const values = [guarantor_name, guarantor_phone, guarantor_email , guarantor_address , guarantor_nic , status, guarantor_id];
+        const { guarantor_name, guarantor_phone, guarantor_email , guarantor_address , guarantor_nic , branchid , guarantor_status } = guarantor;
+        const query = 'UPDATE guarantor SET guarantor_name = ?, guarantor_phone = ?, guarantor_email = ? , guarantor_address = ? , guarantor_nic = ? , branchid = ? , guarantor_status = ? WHERE guarantor_id = ?';
+        const values = [guarantor_name, guarantor_phone, guarantor_email , guarantor_address , guarantor_nic , branchid ,  guarantor_status, guarantor_id];
     
         connection.query(query, values, callback);
       },
@@ -98,9 +98,9 @@ const GuarantorModel = {
           }
       } ,
 
-      updateGuarantorstatus(guarantor_id, status, callback) {
-        const query = 'UPDATE guarantor SET status = ? WHERE guarantor_id = ?';
-        const values = [status, guarantor_id];
+      updateGuarantorstatus(guarantor_id, guarantor_status, callback) {
+        const query = 'UPDATE guarantor SET guarantor_status = ? WHERE guarantor_id = ?';
+        const values = [guarantor_status, guarantor_id];
     
         connection.query(query, values, callback);
       },

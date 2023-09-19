@@ -116,7 +116,7 @@ function updateExistingBranch(branch, branchId) {
 
 const updateBranchStatus = (req, res) => {
   const { branchId } = req.params;
-  const { status } = req.body;
+  const { branch_status } = req.body;
 
   BranchModel.getBranchById(branchId, (error, results) => {
     if (error) {
@@ -129,7 +129,7 @@ const updateBranchStatus = (req, res) => {
       return;
     }
 
-    BranchModel.updateBranchStatus(branchId, status, (error, results) => {
+    BranchModel.updateBranchStatus(branchId, branch_status, (error, results) => {
       if (error) {
         res.status(500).send({ error: 'Error updating status in the database' });
         return;
