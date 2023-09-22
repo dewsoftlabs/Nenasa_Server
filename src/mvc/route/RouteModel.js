@@ -6,7 +6,7 @@ const RouteModel = {
   },
 
   getRoutebyUserId(userid, callback) {
-    connection.query("SELECT * FROM route WHERE userid = ? AND is_delete = 0",[userid], callback );
+    connection.query("SELECT * FROM user WHERE userid = ? AND is_delete = 0",[userid], callback );
   },
 
   getAllRoutes(callback) {
