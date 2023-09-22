@@ -17,7 +17,7 @@ module.exports = (config) => {
     router.post('/create', authorizeAccessControll, addTarget);
     router.get('/all', authorizeAccessControll, getAllTargets);
     router.get('/:target_id', authorizeAccessControll, getTargetById);
-    router.put('/delete/:target_id', authorizeAccessControll, deleteTarget);
+    router.delete('/delete/:target_id', authorizeAccessControll, deleteTarget);
     router.put('/delete', authorizeAccessControll, deleteTargets);
     router.put('/update/:target_id', authorizeAccessControll, updateTarget);
   

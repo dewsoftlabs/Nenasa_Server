@@ -17,7 +17,7 @@ module.exports = (config) => {
     router.post('/create', authorizeAccessControll, addTerms);
     router.get('/all', authorizeAccessControll, getAllTerms);
     router.get('/:terms_id', authorizeAccessControll, getTermsById);
-    router.put('/delete/:terms_id', authorizeAccessControll, deleteTerm);
+    router.delete('/delete/:terms_id', authorizeAccessControll, deleteTerm);
     router.put('/delete', authorizeAccessControll, deleteTerms);
     router.put('/update/:terms_id', authorizeAccessControll, updateTerms);
   
