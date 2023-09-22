@@ -18,7 +18,7 @@ module.exports = (config) => {
   router.get('/all', authorizeAccessControll, getAllCategories);
   router.get('/:categoryId', authorizeAccessControll, getCategoryById);
   // router.put('/status/:categoryId', authorizeAccessControll, updateCategoryStatus);
-  router.put('/delete/:categoryId', authorizeAccessControll, deleteCategory);
+  router.delete('/delete/:categoryId', authorizeAccessControll, deleteCategory);
   router.put('/delete', authorizeAccessControll, deleteCategories);
   router.put('/update/:categoryId', authorizeAccessControll, updateCategory);
 

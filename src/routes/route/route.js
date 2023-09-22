@@ -17,7 +17,7 @@ module.exports = (config) => {
     router.post('/create', authorizeAccessControll, addRoute);
     router.get('/all', authorizeAccessControll, getAllRoutes);
     router.get('/:routeId', authorizeAccessControll, getRouteById);
-    router.put('/delete/:routeId', authorizeAccessControll, deleteRoute);
+    router.delete('/delete/:routeId', authorizeAccessControll, deleteRoute);
     router.put('/delete', authorizeAccessControll, deleteRoutes);
     router.put('/update/:routeId', authorizeAccessControll, updateRoute);
   
