@@ -1,4 +1,5 @@
 const CustomerModel = require("./CustomerModel");
+const BranchModel = require("../branch/BranchModel");
 
 // Regular expression patterns for mobile number and email validation
 const mobileNumberPattern = /^[+0-9]{12}$/;
@@ -20,6 +21,33 @@ const getAllCustomers = (req, res) => {
     }
 
     res.status(200).send(results);
+  });
+};
+
+const getAllCustomersbyBranch = (req, res) => {
+  const { branchid } = req.params;
+
+  BranchModel.getBranchById(branchid, (error, customer) => {
+    if (error) {
+      res.status(500).send({ error: "Error fetching data from the database" });
+      return;
+    }
+
+    if (!customer[0]) {
+      res.status(404).send({ error: "Customer not found" });
+      return;
+    }
+
+    CustomerModel.getAllCustomersbyBranch((error, results) => {
+      if (error) {
+        res
+          .status(500)
+          .send({ error: "Error fetching data from the database" });
+        return;
+      }
+
+      res.status(200).send(results);
+    });
   });
 };
 
@@ -46,14 +74,16 @@ const getCustomerDetailsByNIC = (req, res) => {
 
     const customerId = customerResults[0].customer_id;
 
-        CustomerModel.getCustomerDetailsByID(customerId, (error, results) => {
-          if (error) {
-            res.status(500).send({ error: "Error fetching data from the database" });
-            return;
-          }
-      
-          res.status(200).send(results);
-        });
+    CustomerModel.getCustomerDetailsByID(customerId, (error, results) => {
+      if (error) {
+        res
+          .status(500)
+          .send({ error: "Error fetching data from the database" });
+        return;
+      }
+
+      res.status(200).send(results);
+    });
   });
 };
 
@@ -70,9 +100,13 @@ const addCustomer = (req, res) => {
     return;
   }
 
-  CustomerModel.getCustomerByemail(customer.customer_email,(error, results) => {
+  CustomerModel.getCustomerByemail(
+    customer.customer_email,
+    (error, results) => {
       if (error) {
-        res.status(500).send({ error: "Error fetching data from the database" });
+        res
+          .status(500)
+          .send({ error: "Error fetching data from the database" });
         return;
       }
 
@@ -81,9 +115,13 @@ const addCustomer = (req, res) => {
         return;
       }
 
-      CustomerModel.getCustomerByphone(customer.customer_phone,(error, results) => {
+      CustomerModel.getCustomerByphone(
+        customer.customer_phone,
+        (error, results) => {
           if (error) {
-            res.status(500).send({ error: "Error fetching data from the database" });
+            res
+              .status(500)
+              .send({ error: "Error fetching data from the database" });
             return;
           }
 
@@ -91,7 +129,7 @@ const addCustomer = (req, res) => {
             res.status(409).send({ error: "Phone number already exists" });
             return;
           }
-          
+
           CustomerModel.addCustomer(customer, (error, customer_id) => {
             if (error) {
               res
@@ -327,7 +365,6 @@ const deleteCustomer = (req, res) => {
 };
 
 const updateCustomerStatus = (req, res) => {
-
   const { customer_id } = req.params;
   const { customer_status } = req.body;
 
@@ -342,16 +379,20 @@ const updateCustomerStatus = (req, res) => {
       return;
     }
 
-    CustomerModel.updateCustomerstatus(customer_id, customer_status, (error, results) => {
-      if (error) {
-        res
-          .status(500)
-          .send({ error: "Error updating status in the database" });
-        return;
-      }
+    CustomerModel.updateCustomerstatus(
+      customer_id,
+      customer_status,
+      (error, results) => {
+        if (error) {
+          res
+            .status(500)
+            .send({ error: "Error updating status in the database" });
+          return;
+        }
 
-      res.status(200).send({ message: "Status updated successfully" });
-    });
+        res.status(200).send({ message: "Status updated successfully" });
+      }
+    );
   });
 };
 
@@ -364,4 +405,5 @@ module.exports = {
   deleteCustomer,
   updateCustomerStatus,
   getCustomerDetailsByNIC,
+  getAllCustomersbyBranch
 };

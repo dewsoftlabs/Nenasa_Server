@@ -116,6 +116,7 @@ const tableInfo = [
       { name: 'customer_gender', type: 'VARCHAR(10)' },
       { name: 'customer_nic', type: 'INT(255)' },
       { name: 'branchid', type: 'INT(5)' },
+      { name: 'routeid', type: 'INT(5)' },
       { name: 'trndate', type: 'DATETIME' },
       { name: 'customer_status', type: 'VARCHAR(5)' },
       { name: 'is_delete', type: 'INT(5)' },
