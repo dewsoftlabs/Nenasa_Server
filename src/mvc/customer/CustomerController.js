@@ -27,7 +27,6 @@ const getAllCustomers = (req, res) => {
 const getAllCustomersbyBranch = (req, res) => {
   const { branchid } = req.params;
 
-  console.log(branchid);
 
   BranchModel.getBranchById(branchid, (error, customer) => {
     if (error) {

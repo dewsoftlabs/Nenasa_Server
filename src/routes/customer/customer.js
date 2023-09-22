@@ -21,7 +21,7 @@ module.exports = (config) => {
   
     router.post('/create', authorizeAccessControll,addCustomer);
     router.get('/all', authorizeAccessControll,getAllCustomers);
-    router.get('/branch/all/:branchid', authorizeAccessControll,getAllCustomers);
+    router.get('/branch/all/:branchid', authorizeAccessControll,getAllCustomersbyBranch);
     router.get('/:customer_id', authorizeAccessControll,getCustomerById);
     router.put('/status/:customer_id', authorizeAccessControll, updateCustomerStatus);
     router.put('/update/:customer_id', authorizeAccessControll,updateCustomer);
