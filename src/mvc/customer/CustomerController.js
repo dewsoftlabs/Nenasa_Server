@@ -40,7 +40,7 @@ const getAllCustomersbyBranch = (req, res) => {
       return;
     }
 
-    CustomerModel.getCustomersbyBranch((error, results) => {
+    CustomerModel.getCustomersbyBranch(branchid, (error, results) => {
       if (error) {
         res
           .status(500)
