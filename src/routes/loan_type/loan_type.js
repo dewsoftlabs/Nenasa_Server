@@ -18,7 +18,7 @@ module.exports = (config) => {
     router.get('/all', authorizeAccessControll, getAllTypes);
     router.get('/:loantype_id', authorizeAccessControll, getTypeById);
     router.put('/delete/:loantype_id', authorizeAccessControll, deleteType);
-    router.put('/delete', authorizeAccessControll, deleteTypes);
+    router.delete('/delete', authorizeAccessControll, deleteTypes);
     router.put('/update/:loantype_id', authorizeAccessControll, updateType);
   
     return router;
