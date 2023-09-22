@@ -17,8 +17,8 @@ module.exports = (config) => {
     router.post('/create', authorizeAccessControll, addDepositTypes);
     router.get('/all', authorizeAccessControll, getAllDepositTypes);
     router.get('/:depositType_id', authorizeAccessControll, getDepositTypeById);
-    router.put('/delete/:depositType_id', authorizeAccessControll, deleteDepositType);
-    router.delete('/delete', authorizeAccessControll, deleteDepositTypes);
+    router.delete('/delete/:depositType_id', authorizeAccessControll, deleteDepositType);
+    router.put('/delete', authorizeAccessControll, deleteDepositTypes);
     router.put('/update/:depositType_id', authorizeAccessControll, updateDepositTypes);
   
     return router;
