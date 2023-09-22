@@ -27,6 +27,8 @@ const getAllCustomers = (req, res) => {
 const getAllCustomersbyBranch = (req, res) => {
   const { branchid } = req.params;
 
+  console.log(branchid);
+
   BranchModel.getBranchById(branchid, (error, customer) => {
     if (error) {
       res.status(500).send({ error: "Error fetching data from the database" });
@@ -34,11 +36,11 @@ const getAllCustomersbyBranch = (req, res) => {
     }
 
     if (!customer[0]) {
-      res.status(404).send({ error: "Customer not found" });
+      res.status(404).send({ error: "Branch not found" });
       return;
     }
 
-    CustomerModel.getAllCustomersbyBranch((error, results) => {
+    CustomerModel.getCustomersbyBranch((error, results) => {
       if (error) {
         res
           .status(500)

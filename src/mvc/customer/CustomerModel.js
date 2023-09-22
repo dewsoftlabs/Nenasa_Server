@@ -10,7 +10,7 @@ const customerModel = {
         connection.query('SELECT * FROM customer WHERE is_delete = 0', callback);
       },
 
-      getAllCustomersbyBranch(branchid, callback) {
+      getCustomersbyBranch(branchid, callback) {
         connection.query('SELECT * FROM customer WHERE is_delete = 0 AND branchid = ?',[branchid], callback);
       },
 
