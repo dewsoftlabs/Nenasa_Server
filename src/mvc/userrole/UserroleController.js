@@ -173,7 +173,7 @@ const addPermissiontoUserRole = (req, res) => {
           return;
         }
 
-        console.log(permisssionslist)
+        console.log(permisssionslist);
 
         PermissionGroupModel.addAssignPermission(
           userRoleId,
@@ -304,25 +304,35 @@ const deleteUserRole = (req, res) => {
       return;
     }
 
-    PermissionGroupModel.deleteAssignPermissionByRoleId(userRoleId, (error, results) => {
-      if (error) {
-        res
-          .status(500)
-          .send({ error: "Error updating deletion in the database" });
-        return;
-      }
+    if (userRoleId != 1 || userRoleId != 2) {
+      PermissionGroupModel.deleteAssignPermissionByRoleId(
+        userRoleId,
+        (error, results) => {
+          if (error) {
+            res
+              .status(500)
+              .send({ error: "Error updating deletion in the database" });
+            return;
+          }
 
-      UserRoleModel.deleteUserRole(userRoleId, 1, (error, results) => {
-        if (error) {
-          res
-            .status(500)
-            .send({ error: "Error updating deletion in the database" });
-          return;
+          UserRoleModel.deleteUserRole(userRoleId, 1, (error, results) => {
+            if (error) {
+              res
+                .status(500)
+                .send({ error: "Error updating deletion in the database" });
+              return;
+            }
+
+            res.status(200).send({ message: "Userrole deleted successfully" });
+          });
         }
-
-        res.status(200).send({ message: "Userrole deleted successfully" });
-      });
-    });
+      );
+    } else {
+      res
+        .status(404)
+        .send({ error: "This User Role cant dlete. Please Contact Developer" });
+      return;
+    }
   });
 };
 
