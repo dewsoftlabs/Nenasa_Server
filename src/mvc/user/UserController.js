@@ -2,6 +2,8 @@ const UserModel = require("./UserModel");
 const userView = require("./userView");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
+const { sendEmail, sendEmailWithAttachment, sendVerificationEmail } = require('../../../config/mail');
+const { getToken } = require('../../../config/token');
 require("dotenv").config(); // Load environment variables
 
 const login = (req, res) => {
@@ -168,6 +170,9 @@ const addUser = (req, res) => {
               res.status(500).send({ error: "Failed to create user" });
               return;
             }
+
+            const verificationToken = getToken(user.email, '1h');
+            sendVerificationEmail(user.email, verificationToken);
 
             res
               .status(200)
