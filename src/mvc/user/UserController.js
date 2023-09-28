@@ -492,34 +492,27 @@ const changeEmail = (req, res) => {
       return res.status(400).json({ error: "Current email is incorrect" });
     }
 
-    UserModel.changeEmail(userid, newEmail, (error, results) => {
-      if (error) {
-        res.status(500).send({ error: "Error updating email in the database" });
-        return;
+    UserModel.changeEmail(userid, newEmail, (updateError, results) => {
+      if (updateError) {
+        return res
+          .status(500)
+          .json({ error: "Error updating email in the database" });
       }
 
       const verificationToken = getToken(newEmail, "1h");
       sendVerificationEmail(newEmail, verificationToken);
 
-      UserModel.updatestatus(
-        user[0].userid, // Corrected variable name
-        0,
-        (updateError, updateResult) => {
-          if (updateError) {
-            return res
-              .status(500)
-              .json({ error: "Error updating user status" });
-          } else {
-            return res
-              .status(200)
-              .json(
-                "You have to verify the new email before logging into the system"
-              );
-          }
+      UserModel.updatestatus(user[0].userid, 0, (updateStatusError) => {
+        if (updateStatusError) {
+          return res.status(500).json({ error: "Error updating user status" });
         }
-      );
 
-      res.status(200).send({ message: "Email changed successfully" });
+        return res
+          .status(200)
+          .json(
+            "You have to verify the new email before logging into the system"
+          );
+      });
     });
   });
 };
