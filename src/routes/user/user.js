@@ -26,7 +26,7 @@ module.exports = (config) => {
     //login and create
     router.post('/create', addUser);
     router.post('/login', login);
-    router.get('/verifyCreateEmail', validateUser);
+    router.get('/verifyCreateEmail/:token', validateUser);
 
     //admin controls
     router.get('/all', authorizeAccessControll, getAll);
