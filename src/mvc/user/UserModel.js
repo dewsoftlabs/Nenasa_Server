@@ -8,14 +8,13 @@ const UserModel = {
       [username],
       (error, results) => {
         if (error) {
-          callback(error, null);
-          return;
+          console.error("Error executing query:", error);
+          return callback(error, null);
         }
 
         if (results.length === 0) {
           // User with the provided username not found
-          callback(null, null);
-          return;
+          return callback(null, null);
         }
 
         const storedPasswordHash = results[0].password;
@@ -23,16 +22,16 @@ const UserModel = {
         // Compare the provided password with the stored password hash using bcrypt
         bcrypt.compare(password, storedPasswordHash, (err, isMatch) => {
           if (err) {
-            callback(err, null);
-            return;
+            console.error("Error comparing passwords:", err);
+            return callback(err, null);
           }
 
           if (isMatch) {
             // Passwords match, return the user's data
-            callback(null, results);
+            return callback(null, results[0]);
           } else {
             // Passwords do not match
-            callback(null, null);
+            return callback(null, null);
           }
         });
       }
@@ -99,6 +98,7 @@ const UserModel = {
       userroleid,
       branchid,
     } = user;
+
     const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const defaultvalues = 0;
     const activevalues = 0;
@@ -108,8 +108,8 @@ const UserModel = {
     bcrypt.hash(password, 10, (err, hash) => {
       // 10 is the number of bcrypt salt rounds
       if (err) {
-        callback(err, null);
-        return;
+        console.error("Error hashing password:", err);
+        return callback(err, null);
       }
 
       const query =
@@ -133,9 +133,8 @@ const UserModel = {
 
       connection.query(query, values, (error, results) => {
         if (error) {
-          console.log(error);
-          callback(error, null);
-          return;
+          console.error("Error executing query:", error);
+          return callback(error, null);
         }
 
         const userId = results.insertId;
