@@ -15,11 +15,10 @@ const UserRoleModel = {
 
   getAllAvailableUserRoles(callback) {
     const query = `
-      SELECT *
-      FROM userrole
+    SELECT DISTINCT userrole.userroleid, userrole.role, assign_permission.*  
+    FROM userrole
         JOIN assign_permission ON userrole.userroleid = assign_permission.userroleid
       WHERE userrole.is_delete = 0
-      GROUP BY userrole.role
     `;
 
     connection.query(query, (error, results) => {
