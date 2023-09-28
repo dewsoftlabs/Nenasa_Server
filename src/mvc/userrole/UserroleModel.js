@@ -18,8 +18,7 @@ const UserRoleModel = {
       SELECT *
       FROM userrole
         JOIN assign_permission ON userrole.userroleid = assign_permission.userroleid
-        JOIN permission ON permission.permission_code = assign_permission.permission_code
-      WHERE assign_permission.is_delete = 0
+      WHERE userrole.is_delete = 0
     `;
 
     connection.query(query, (error, results) => {
