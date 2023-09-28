@@ -1,6 +1,7 @@
 const UserModel = require("./UserModel");
 const userView = require("./userView");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
 require("dotenv").config(); // Load environment variables
 
 const login = (req, res) => {
@@ -325,46 +326,53 @@ const updateUserProfile = (req, res) => {
 
 const changePassword = (req, res) => {
   const { userid } = req.params;
-  const { currentPassword, password } = req.body;
+  const { currentPassword, newPassword } = req.body;
 
   // Check if current password is empty
   if (!currentPassword) {
-    res.status(400).send({ error: "Current password is required" });
-    return;
+      res.status(400).send({ error: 'Current password is required' });
+      return;
   }
 
   // Check if new password is empty
-  if (!password) {
-    res.status(400).send({ error: "New password is required" });
-    return;
+  if (!newPassword) {
+      res.status(400).send({ error: 'New password is required' });
+      return;
   }
 
   UserModel.getUserById(userid, (error, user) => {
-    if (error) {
-      res.status(500).send({ error: "Error fetching data from the database" });
-      return;
-    }
-
-    if (!user[0]) {
-      res.status(404).send({ error: "User not found" });
-      return;
-    }
-
-    if (user[0].password !== currentPassword) {
-      res.status(400).send({ error: "Current password is incorrect" });
-      return;
-    }
-
-    UserModel.updateUserPassword(userid, password, (error, results) => {
       if (error) {
-        res
-          .status(500)
-          .send({ error: "Error updating password in the database" });
-        return;
+          res.status(500).send({ error: 'Error fetching data from the database' });
+          return;
       }
 
-      res.status(200).send({ message: "Password changed successfully" });
-    });
+      if (!user[0]) {
+          res.status(404).send({ error: 'User not found' });
+          return;
+      }
+
+      // Compare the current password with the stored password hash using bcrypt
+      bcrypt.compare(currentPassword, user[0].password, (err, isMatch) => {
+          if (err) {
+              res.status(500).send({ error: 'Error comparing passwords' });
+              return;
+          }
+
+          if (!isMatch) {
+              res.status(400).send({ error: 'Current password is incorrect' });
+              return;
+          }
+
+          UserModel.updateUserPassword(userid, newPassword, (updateErr, results) => {
+              if (updateErr) {
+                  res.status(500).send({ error: 'Error updating password in the database' });
+                  return;
+              }
+
+              res.status(200).send({ message: 'Password changed successfully' });
+          });
+
+      });
   });
 };
 
