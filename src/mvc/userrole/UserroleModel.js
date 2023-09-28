@@ -19,7 +19,7 @@ const UserRoleModel = {
       FROM userrole
         JOIN assign_permission ON userrole.userroleid = assign_permission.userroleid
       WHERE userrole.is_delete = 0
-      GROUP BY userrole.userroleid
+      GROUP BY userrole.role
     `;
 
     connection.query(query, (error, results) => {
