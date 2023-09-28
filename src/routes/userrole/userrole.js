@@ -13,7 +13,7 @@ const {
   permissionByroleid,
 } = require('../../mvc/userrole/UserroleController');
 const { authenticateToken } = require('../../middlewares/userAuth');
-const { authorizeAccessSupoerAdmin } = require('../../middlewares/userAccess');
+const { authorizeAccessSupoerAdmin, authorizeAccessControll } = require('../../middlewares/userAccess');
 
 module.exports = (config) => {
   const router = express.Router();
@@ -21,15 +21,15 @@ module.exports = (config) => {
   router.get('/permissionByroleid/:userid/:userroleid', authenticateToken, permissionByroleid);
 
   //super admin only
-  router.post('/create', authorizeAccessSupoerAdmin, addUserRole);
-  router.put('/addpermissions/:userRoleId', authorizeAccessSupoerAdmin, addPermissiontoUserRole);
-  router.get('/all', authorizeAccessSupoerAdmin, getAllUserRoles);
-  router.get('/availble/all', authorizeAccessSupoerAdmin, getAllAvailableUserRoles);
-  router.get('/:userRoleId', authorizeAccessSupoerAdmin, getUserRoleById);
-  router.put('/status/:userRoleId', authorizeAccessSupoerAdmin, updateUserRoleStatus);
-  router.delete('/delete/:userRoleId', authorizeAccessSupoerAdmin, deleteUserRole);
-  router.put('/delete', authorizeAccessSupoerAdmin, deleteRoles);
-  router.put('/update/:userRoleId', authorizeAccessSupoerAdmin, updateUserRole);
+  router.post('/create', authorizeAccessControll, addUserRole);
+  router.put('/addpermissions/:userRoleId', authorizeAccessControll, addPermissiontoUserRole);
+  router.get('/all', authorizeAccessControll, getAllUserRoles);
+  router.get('/availble/all', authorizeAccessControll, getAllAvailableUserRoles);
+  router.get('/:userRoleId', authorizeAccessControll, getUserRoleById);
+  router.put('/status/:userRoleId', authorizeAccessControll, updateUserRoleStatus);
+  router.delete('/delete/:userRoleId', authorizeAccessControll, deleteUserRole);
+  router.put('/delete', authorizeAccessControll, deleteRoles);
+  router.put('/update/:userRoleId', authorizeAccessControll, updateUserRole);
 
   return router;
 };
