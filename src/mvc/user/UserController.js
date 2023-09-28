@@ -325,7 +325,7 @@ const updateUserProfile = (req, res) => {
 
 const changePassword = (req, res) => {
   const { userid } = req.params;
-  const { currentPassword, newPassword } = req.body;
+  const { currentPassword, password } = req.body;
 
   // Check if current password is empty
   if (!currentPassword) {
@@ -334,7 +334,7 @@ const changePassword = (req, res) => {
   }
 
   // Check if new password is empty
-  if (!newPassword) {
+  if (!password) {
     res.status(400).send({ error: "New password is required" });
     return;
   }
@@ -355,7 +355,7 @@ const changePassword = (req, res) => {
       return;
     }
 
-    UserModel.updateUserPassword(userid, newPassword, (error, results) => {
+    UserModel.updateUserPassword(userid, password, (error, results) => {
       if (error) {
         res
           .status(500)
