@@ -9,6 +9,10 @@ const UserRoleModel = {
     connection.query('SELECT * FROM userrole WHERE is_delete = 0', callback);
   },
 
+  getAllAvailableUserRoles(callback) {
+    connection.query('SELECT * FROM userrole JOIN assign_permission ON userrole.userroleid = assign_permission.userroleid JOIN permission ON permission.permission_code = assign_permission.permission_code WHERE assign_permission.is_delete = 0 GROUP BY userrole.userroleid', callback);
+  },
+
   getUserPermission(userRoleId, userid, callback) {
     const query = 'SELECT * FROM assign_permission WHERE userroleid = ? AND is_delete = 0';
     const values = [userRoleId, userid];

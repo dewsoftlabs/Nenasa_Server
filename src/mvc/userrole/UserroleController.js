@@ -13,6 +13,17 @@ const getAllUserRoles = (req, res) => {
   });
 };
 
+const getAllAvailableUserRoles = (req, res) => {
+  UserRoleModel.getAllAvailableUserRoles((error, results) => {
+    if (error) {
+      res.status(500).send({ error: "Error fetching data from the database" });
+      return;
+    }
+
+    res.status(200).send(results);
+  });
+};
+
 const permissionByroleid = (req, res) => {
   const { userid, userroleid } = req.params;
 
@@ -30,8 +41,6 @@ const permissionByroleid = (req, res) => {
 
     // Access the user role ID from the results object
     const userRoleIds = results[0].userroleid;
-    console.log("userRoleId", userRoleIds);
-    console.log("userroleid", userroleid);
 
     // Check if the user has the correct user role
     if (userRoleIds != userroleid) {
@@ -428,4 +437,5 @@ module.exports = {
   deleteRoles,
   permissionByroleid,
   addPermissiontoUserRole,
+  getAllAvailableUserRoles
 };

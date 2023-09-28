@@ -9,6 +9,7 @@ const {
   permanentDeleteUserRole,
   deleteRoles,
   addPermissiontoUserRole,
+  getAllAvailableUserRoles,
   permissionByroleid,
 } = require('../../mvc/userrole/UserroleController');
 const { authenticateToken } = require('../../middlewares/userAuth');
@@ -23,6 +24,7 @@ module.exports = (config) => {
   router.post('/create', authorizeAccessSupoerAdmin, addUserRole);
   router.put('/addpermissions/:userRoleId', authorizeAccessSupoerAdmin, addPermissiontoUserRole);
   router.get('/all', authorizeAccessSupoerAdmin, getAllUserRoles);
+  router.get('/availble/all', authorizeAccessSupoerAdmin, getAllAvailableUserRoles);
   router.get('/:userRoleId', authorizeAccessSupoerAdmin, getUserRoleById);
   router.put('/status/:userRoleId', authorizeAccessSupoerAdmin, updateUserRoleStatus);
   router.delete('/delete/:userRoleId', authorizeAccessSupoerAdmin, deleteUserRole);
