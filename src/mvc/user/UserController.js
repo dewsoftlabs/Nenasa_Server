@@ -178,9 +178,10 @@ const addUser = (req, res) => {
             const verificationToken = getToken(user.email, "1h");
             sendVerificationEmail(user.email, verificationToken);
 
-            res
-              .status(200)
-              .send({ message: "User created successfully", userId });
+            res.status(200).send({
+              message: "User created successfully. He have to confirm email",
+              userId,
+            });
           });
         });
       });
@@ -468,30 +469,27 @@ const changeEmail = (req, res) => {
 
   // Check if current email is empty or not in the correct format
   if (!currentEmail || !emailRegex.test(currentEmail)) {
-    res.status(400).send({ error: "Invalid or missing current email" });
-    return;
+    return res.status(400).json({ error: "Invalid or missing current email" });
   }
 
   // Check if new email is empty or not in the correct format
   if (!newEmail || !emailRegex.test(newEmail)) {
-    res.status(400).send({ error: "Invalid or missing new email" });
-    return;
+    return res.status(400).json({ error: "Invalid or missing new email" });
   }
 
   UserModel.getUserById(userid, (error, user) => {
     if (error) {
-      res.status(500).send({ error: "Error fetching data from the database" });
-      return;
+      return res
+        .status(500)
+        .json({ error: "Error fetching data from the database" });
     }
 
-    if (!user[0]) {
-      res.status(404).send({ error: "User not found" });
-      return;
+    if (!user || !user[0]) {
+      return res.status(404).json({ error: "User not found" });
     }
 
     if (user[0].email !== currentEmail) {
-      res.status(400).send({ error: "Current email is incorrect" });
-      return;
+      return res.status(400).json({ error: "Current email is incorrect" });
     }
 
     UserModel.changeEmail(userid, newEmail, (error, results) => {
@@ -499,6 +497,27 @@ const changeEmail = (req, res) => {
         res.status(500).send({ error: "Error updating email in the database" });
         return;
       }
+
+      const verificationToken = getToken(newEmail, "1h");
+      sendVerificationEmail(newEmail, verificationToken);
+
+      UserModel.updatestatus(
+        user[0].userid, // Corrected variable name
+        0,
+        (updateError, updateResult) => {
+          if (updateError) {
+            return res
+              .status(500)
+              .json({ error: "Error updating user status" });
+          } else {
+            return res
+              .status(200)
+              .json(
+                "You have to verify the new email before logging into the system"
+              );
+          }
+        }
+      );
 
       res.status(200).send({ message: "Email changed successfully" });
     });
@@ -707,5 +726,5 @@ module.exports = {
   updateUserProfile,
   meUpdateUser,
   changeUsername,
-  validateUser
+  validateUser,
 };
