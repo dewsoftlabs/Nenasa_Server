@@ -8,13 +8,14 @@ const UserModel = {
       [username],
       (error, results) => {
         if (error) {
-          console.error("Error executing query:", error);
-          return callback(error, null);
+          callback(error, null);
+          return;
         }
 
         if (results.length === 0) {
           // User with the provided username not found
-          return callback(null, null);
+          callback(null, null);
+          return;
         }
 
         const storedPasswordHash = results[0].password;
@@ -22,16 +23,16 @@ const UserModel = {
         // Compare the provided password with the stored password hash using bcrypt
         bcrypt.compare(password, storedPasswordHash, (err, isMatch) => {
           if (err) {
-            console.error("Error comparing passwords:", err);
-            return callback(err, null);
+            callback(err, null);
+            return;
           }
 
           if (isMatch) {
             // Passwords match, return the user's data
-            return callback(null, results[0]);
+            callback(null, results);
           } else {
             // Passwords do not match
-            return callback(null, null);
+            callback(null, null);
           }
         });
       }
