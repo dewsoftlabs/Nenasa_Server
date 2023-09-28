@@ -245,6 +245,13 @@ const UserModel = {
     connection.query(query, values, callback);
   },
 
+  updatestatusbyEmail(email, callback) {
+    const query = "UPDATE user SET status = 1 WHERE email = ?";
+    const values = [email];
+
+    connection.query(query, values, callback);
+  },
+
   deleteuser(userid, value, callback) {
     const query = "UPDATE user SET is_delete = ? WHERE userid = ?";
     const values = [value, userid];

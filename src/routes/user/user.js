@@ -14,6 +14,7 @@ const { login,
     changePassword,
     changeStatus,
     deleteuser,
+    validateUser
 } = require('../../mvc/user/UserController');
 const { authenticateToken, authorizeValidateUser } = require('../../middlewares/userAuth');
 const { authorizeAccessControll } = require('../../middlewares/userAccess');
@@ -25,6 +26,7 @@ module.exports = (config) => {
     //login and create
     router.post('/create', addUser);
     router.post('/login', login);
+    router.get('/verifyCreateEmail', validateUser);
 
     //admin controls
     router.get('/all', authorizeAccessControll, getAll);

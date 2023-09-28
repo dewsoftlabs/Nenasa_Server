@@ -1,9 +1,13 @@
 const UserModel = require("./UserModel");
 const userView = require("./userView");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
-const { sendEmail, sendEmailWithAttachment, sendVerificationEmail } = require('../../../config/mail');
-const { getToken } = require('../../../config/token');
+const bcrypt = require("bcrypt");
+const {
+  sendEmail,
+  sendEmailWithAttachment,
+  sendVerificationEmail,
+} = require("../../../config/mail");
+const { getToken } = require("../../../config/token");
 require("dotenv").config(); // Load environment variables
 
 const login = (req, res) => {
@@ -171,7 +175,7 @@ const addUser = (req, res) => {
               return;
             }
 
-            const verificationToken = getToken(user.email, '1h');
+            const verificationToken = getToken(user.email, "1h");
             sendVerificationEmail(user.email, verificationToken);
 
             res
@@ -237,6 +241,79 @@ const updateUser = (req, res) => {
 
       res.status(200).send({ message: "User updated successfully" });
     });
+  }
+};
+
+const validateUser = (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const email = decoded.email; // Use the correct field name from the token
+
+    UserModel.getUserByEmail(email, async (error, existingUsers) => {
+      if (error) {
+        return res
+          .status(500)
+          .send({ error: "Error fetching data from the database" });
+      }
+
+      if (!existingUsers[0]) {
+        return res.status(404).send({ error: "Dealer not found" });
+      }
+
+      UserModel.updatestatus(
+        existingUsers[0].userid,
+        1,
+        (updateError, updateResult) => {
+          if (updateError) {
+            return res
+              .status(500)
+              .send({ error: "Error updating dealer status" });
+          } else {
+            // Prepare the HTML response
+            const redirectUrl = "https://mail.google.com"; // Replace with the Gmail URL you want to redirect to
+            const htmlResponse = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Thank You for Join with Us</title>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                text-align: center;
+                                padding: 50px;
+                            }
+                            h1 {
+                                color: #333;
+                            }
+                            p {
+                                color: #777;
+                                margin-top: 20px;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Thank You!</h1>
+                        <p>Your Account has been successfully verified.</p>
+                        <script>
+                            setTimeout(function() {
+                                window.location.href = "${redirectUrl}";
+                            }, 2000); // Adjust the delay time as needed
+                        </script>
+                    </body>
+                    </html>
+                `;
+            return res.status(200).send(htmlResponse);
+          }
+        }
+      );
+    });
+  } catch (tokenError) {
+    return res.status(400).send({ error: "Token is invalid or expired" });
   }
 };
 
@@ -335,49 +412,50 @@ const changePassword = (req, res) => {
 
   // Check if current password is empty
   if (!currentPassword) {
-      res.status(400).send({ error: 'Current password is required' });
-      return;
+    res.status(400).send({ error: "Current password is required" });
+    return;
   }
 
   // Check if new password is empty
   if (!password) {
-      res.status(400).send({ error: 'New password is required' });
-      return;
+    res.status(400).send({ error: "New password is required" });
+    return;
   }
 
   UserModel.getUserById(userid, (error, user) => {
-      if (error) {
-          res.status(500).send({ error: 'Error fetching data from the database' });
-          return;
+    if (error) {
+      res.status(500).send({ error: "Error fetching data from the database" });
+      return;
+    }
+
+    if (!user[0]) {
+      res.status(404).send({ error: "User not found" });
+      return;
+    }
+
+    // Compare the current password with the stored password hash using bcrypt
+    bcrypt.compare(currentPassword, user[0].password, (err, isMatch) => {
+      if (err) {
+        res.status(500).send({ error: "Error comparing passwords" });
+        return;
       }
 
-      if (!user[0]) {
-          res.status(404).send({ error: 'User not found' });
-          return;
+      if (!isMatch) {
+        res.status(400).send({ error: "Current password is incorrect" });
+        return;
       }
 
-      // Compare the current password with the stored password hash using bcrypt
-      bcrypt.compare(currentPassword, user[0].password, (err, isMatch) => {
-          if (err) {
-              res.status(500).send({ error: 'Error comparing passwords' });
-              return;
-          }
+      UserModel.updateUserPassword(userid, password, (updateErr, results) => {
+        if (updateErr) {
+          res
+            .status(500)
+            .send({ error: "Error updating password in the database" });
+          return;
+        }
 
-          if (!isMatch) {
-              res.status(400).send({ error: 'Current password is incorrect' });
-              return;
-          }
-
-          UserModel.updateUserPassword(userid, password, (updateErr, results) => {
-              if (updateErr) {
-                  res.status(500).send({ error: 'Error updating password in the database' });
-                  return;
-              }
-
-              res.status(200).send({ message: 'Password changed successfully' });
-          });
-
+        res.status(200).send({ message: "Password changed successfully" });
       });
+    });
   });
 };
 
@@ -629,4 +707,5 @@ module.exports = {
   updateUserProfile,
   meUpdateUser,
   changeUsername,
+  validateUser
 };
