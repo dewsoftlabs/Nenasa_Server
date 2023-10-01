@@ -38,6 +38,7 @@ const addLoan = (req, res) => {
   console.log(loan);
   console.log(customer);
   console.log(deposit);
+  console.log(guarantor);
 
   // Function to handle errors and send responses
   const handleError = (statusCode, errorMessage) => {
@@ -48,7 +49,7 @@ const addLoan = (req, res) => {
   const createNewCustomer = (customer, callback) => {
     customerModel.addCustomer(customer, (error, customer_id) => {
       if (error) {
-        return handleError(500, "Error fetching data from the database");
+        return handleError(500, "Error fetching data from the database customer");
       }
 
       if (!customer_id) {
@@ -63,7 +64,7 @@ const addLoan = (req, res) => {
   const createNewGuarantor = (guarantor, callback) => {
     GuarantorModel.addGuarantor(guarantor, (error, guarantor_id) => {
       if (error) {
-        return handleError(500, "Error fetching data from the database");
+        return handleError(500, "Error fetching data from the database guarantor");
       }
 
       if (!guarantor_id) {
@@ -78,7 +79,7 @@ const addLoan = (req, res) => {
   const createDepositAccount = (customer_id, deposit, callback) => {
     depositAccModel.adddepositAcc(customer_id, deposit, (error, deposit_acc_no) => {
       if (error) {
-        return handleError(500, "Error fetching data from the database");
+        return handleError(500, "Error fetching data from the database deposit");
       }
 
       if (!deposit_acc_no) {
@@ -93,7 +94,7 @@ const addLoan = (req, res) => {
   const createNewLoan = (customer_id, deposit_acc_no, guarantor_id) => {
     loanModel.addLoan(customer_id, deposit_acc_no, guarantor_id, loan, (error, loan_id) => {
       if (error) {
-        return handleError(500, "Error fetching data from the database");
+        return handleError(500, "Error fetching data from the database deposit_acc_no");
       }
 
       if (!loan_id) {
@@ -108,7 +109,7 @@ const addLoan = (req, res) => {
 
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
     if (error) {
-      return handleError(500, "Error fetching data from the database");
+      return handleError(500, "Error fetching data from the database customer_nic");
     }
 
     if (customerResults.length === 0) {
@@ -116,7 +117,7 @@ const addLoan = (req, res) => {
         createDepositAccount(customer_id, deposit, (deposit_acc_no) => {
           GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
             if (error) {
-              return handleError(500, "Error fetching data from the database");
+              return handleError(500, "Error fetching data from the database guarantor_nic");
             }
 
             if (guarantorResults.length === 0) {
@@ -163,7 +164,7 @@ const addLoan = (req, res) => {
   const checkAndCreateLoan = (customer_id, deposit_acc_no, guarantor_id) => {
     loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
       if (error) {
-        return handleError(500, "Error fetching data from the database");
+        return handleError(500, "Error fetching data from the database checkAndCreateLoan");
       }
 
       if (results.length > 0) {
