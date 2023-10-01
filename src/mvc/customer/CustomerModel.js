@@ -53,9 +53,11 @@ const customerModel = {
         const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const defaultValues = 0;
         const activeValues = 1;
-    
+        console.log(branchid)
+        
         const query = 'INSERT INTO customer (customer_name, customer_phone, customer_email, customer_address , customer_gender , customer_nic , branchid , trndate, customer_status, is_delete, routeid) VALUES (?, ?, ?, ?, ?, ?, ? , ?, ? , ?, ?)';
         const values = [customer_name,customer_phone,customer_email, customer_address , customer_gender , customer_nic , branchid , trndate, activeValues, defaultValues, routeid];
+        console.log(values)
     
         connection.query(query, values, (error, results) => {
           if (error) {
