@@ -37,7 +37,7 @@ const addLoan = (req, res) => {
 
   console.log(loan);
   console.log(customer);
-  console.log(deposit);
+  console.log('deposit' ,deposit);
   console.log(guarantor);
 
   // Function to handle errors and send responses
