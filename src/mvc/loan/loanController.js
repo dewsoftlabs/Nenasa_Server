@@ -35,6 +35,10 @@ const getLoanById = (req, res) => {
 const addLoan = (req, res) => {
   const { loan, customer, deposit, guarantor } = req.body;
 
+  console.log(loan);
+  console.log(customer);
+  console.log(deposit);
+
   // Function to handle errors and send responses
   const handleError = (statusCode, errorMessage) => {
     res.status(statusCode).send({ error: errorMessage });
