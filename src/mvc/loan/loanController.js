@@ -137,6 +137,7 @@ const addLoan = (req, res) => {
         }
 
         console.log(error)
+        console.log('depositresults', depositresults)
 
         if (depositresults.length === 0) {
           return handleError(409, "This customer does not have a Deposit Account");
