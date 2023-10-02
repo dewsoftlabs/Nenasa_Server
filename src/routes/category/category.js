@@ -14,13 +14,13 @@ const { authorizeAccessControll } = require('../../middlewares/userAccess');
 module.exports = (config) => {
   const router = express.Router();
 
-  router.post('/create', authorizeAccessControll, addCategory);
+  router.post('/create', authenticateToken, addCategory);
   router.get('/all', authenticateToken, getAllCategories);
-  router.get('/:categoryId', authorizeAccessControll, getCategoryById);
-  // router.put('/status/:categoryId', authorizeAccessControll, updateCategoryStatus);
-  router.delete('/delete/:categoryId', authorizeAccessControll, deleteCategory);
-  router.put('/delete', authorizeAccessControll, deleteCategories);
-  router.put('/update/:categoryId', authorizeAccessControll, updateCategory);
+  router.get('/:categoryId', authenticateToken, getCategoryById);
+  // router.put('/status/:categoryId', authenticateToken, updateCategoryStatus);
+  router.delete('/delete/:categoryId', authenticateToken, deleteCategory);
+  router.put('/delete', authenticateToken, deleteCategories);
+  router.put('/update/:categoryId', authenticateToken, updateCategory);
 
   return router;
 };

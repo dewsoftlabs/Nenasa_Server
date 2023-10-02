@@ -14,12 +14,12 @@ const { authorizeAccessControll } = require('../../middlewares/userAccess');
 module.exports = (config) => {
     const router = express.Router();
   
-    router.post('/create', authorizeAccessControll, addType);
+    router.post('/create', authenticateToken, addType);
     router.get('/all', authenticateToken, getAllTypes);
-    router.get('/:loantype_id', authorizeAccessControll, getTypeById);
-    router.delete('/delete/:loantype_id', authorizeAccessControll, deleteType);
-    router.put('/delete', authorizeAccessControll, deleteTypes);
-    router.put('/update/:loantype_id', authorizeAccessControll, updateType);
+    router.get('/:loantype_id', authenticateToken, getTypeById);
+    router.delete('/delete/:loantype_id', authenticateToken, deleteType);
+    router.put('/delete', authenticateToken, deleteTypes);
+    router.put('/update/:loantype_id', authenticateToken, updateType);
   
     return router;
   };

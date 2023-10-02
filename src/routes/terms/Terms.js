@@ -14,12 +14,12 @@ const { authorizeAccessControll } = require('../../middlewares/userAccess');
 module.exports = (config) => {
     const router = express.Router();
   
-    router.post('/create', authorizeAccessControll, addTerms);
+    router.post('/create', authenticateToken, addTerms);
     router.get('/all', authenticateToken, getAllTerms);
-    router.get('/:terms_id', authorizeAccessControll, getTermsById);
-    router.delete('/delete/:terms_id', authorizeAccessControll, deleteTerm);
-    router.put('/delete', authorizeAccessControll, deleteTerms);
-    router.put('/update/:terms_id', authorizeAccessControll, updateTerms);
+    router.get('/:terms_id', authenticateToken, getTermsById);
+    router.delete('/delete/:terms_id', authenticateToken, deleteTerm);
+    router.put('/delete', authenticateToken, deleteTerms);
+    router.put('/update/:terms_id', authenticateToken, updateTerms);
   
     return router;
   };

@@ -14,12 +14,12 @@ const { authorizeAccessControll } = require('../../middlewares/userAccess');
 module.exports = (config) => {
     const router = express.Router();
   
-    router.post('/create', authorizeAccessControll, addRoute);
+    router.post('/create', authenticateToken, addRoute);
     router.get('/all', authenticateToken, getAllRoutes);
-    router.get('/:routeId', authorizeAccessControll, getRouteById);
-    router.delete('/delete/:routeId', authorizeAccessControll, deleteRoute);
-    router.put('/delete', authorizeAccessControll, deleteRoutes);
-    router.put('/update/:routeId', authorizeAccessControll, updateRoute);
+    router.get('/:routeId', authenticateToken, getRouteById);
+    router.delete('/delete/:routeId', authenticateToken, deleteRoute);
+    router.put('/delete', authenticateToken, deleteRoutes);
+    router.put('/update/:routeId', authenticateToken, updateRoute);
   
     return router;
   };
