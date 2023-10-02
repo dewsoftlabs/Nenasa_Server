@@ -10,6 +10,7 @@ const depositAccModel = {
   },
 
   getdepositAccBycustId(customer_id, callback) {
+    console.log(customer_id)
     connection.query("SELECT * FROM deposit_acc WHERE customer_id = ? ", [customer_id] ,callback);
   },
 
