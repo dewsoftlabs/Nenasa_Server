@@ -106,7 +106,7 @@ const addLoan = (req, res) => {
   };
 
   //model
-
+  console.log(customer.customer_nic)
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
     if (error) {
       return handleError(500, "Error fetching data from the database customer_nic");
