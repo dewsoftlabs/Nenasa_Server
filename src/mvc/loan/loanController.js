@@ -136,7 +136,7 @@ const addLoan = (req, res) => {
           return handleError(500, "Error fetching data from the database");
         }
 
-        console.log(depositresults)
+        console.log(error)
 
         if (depositresults.length === 0) {
           return handleError(409, "This customer does not have a Deposit Account");
