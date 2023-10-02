@@ -11,7 +11,7 @@ const customerModel = {
       },
 
       getCustomersbyBranch(branchid, callback) {
-        connection.query('SELECT * FROM customer WHERE is_delete = 0 AND branchid = ?',[branchid], callback);
+        connection.query('SELECT * FROM customer JOIN branch ON branch.branchid = customer.branchid  WHERE customer.is_delete = 0 AND customer.branchid = ?',[branchid], callback);
       },
 
       getCustomerByphone(customer_phone, callback) {
