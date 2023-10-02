@@ -10,8 +10,19 @@ const depositAccModel = {
   },
 
   getdepositAccBycustId(customer_id, callback) {
-    console.log(customer_id)
-    connection.query("SELECT * FROM deposit_acc WHERE customer_id = ? ", [customer_id] ,callback);
+    connection.query(
+      "SELECT * FROM deposit_acc WHERE customer_id = ? AND is_delete = 0",
+      [customer_id],
+      (error, results) => {
+        if (error) {
+          console.error("Error executing query:", error);
+          callback(error, null);
+          return;
+        }
+  
+        callback(null, results);
+      }
+    );
   },
 
   adddepositAcc(customer_id ,deposit_acc, callback) {
