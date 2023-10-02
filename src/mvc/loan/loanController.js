@@ -130,11 +130,13 @@ const addLoan = (req, res) => {
       });
     } else {
       const customerId = customerResults[0].customer_id;
-      console.log(customerResults[0].customer_id)
+      console.log(customerId)
       depositAccModel.getdepositAccBycustId(customerId, (error, depositresults) => {
         if (error) {
           return handleError(500, "Error fetching data from the database");
         }
+
+        console.log(depositresults)
 
         if (depositresults.length === 0) {
           return handleError(409, "This customer does not have a Deposit Account");
