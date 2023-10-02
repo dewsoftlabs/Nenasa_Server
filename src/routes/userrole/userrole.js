@@ -23,7 +23,7 @@ module.exports = (config) => {
   //super admin only
   router.post('/create', authorizeAccessControll, addUserRole);
   router.put('/addpermissions/:userRoleId', authorizeAccessControll, addPermissiontoUserRole);
-  router.get('/all', authorizeAccessControll, getAllUserRoles);
+  router.get('/all', authenticateToken, getAllUserRoles);
   router.get('/availble/all', authorizeAccessControll, getAllAvailableUserRoles);
   router.get('/:userRoleId', authorizeAccessControll, getUserRoleById);
   router.put('/status/:userRoleId', authorizeAccessControll, updateUserRoleStatus);
