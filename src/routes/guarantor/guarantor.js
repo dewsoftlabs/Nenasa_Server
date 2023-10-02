@@ -18,14 +18,14 @@ const { authorizeAccessControll } = require('../../middlewares/userAccess');
 module.exports = (config) => {
     const router = express.Router();
   
-    router.post('/create', authorizeAccessControll,addGuarantor);
-    router.get('/all', authorizeAccessControll,getAllGuarantors);
-    router.get('/branch/all', authorizeAccessControll,getAllGuarantors);
-    router.get('/:guarantor_id', authorizeAccessControll,getGuarantorById);
-    router.put('/status/:guarantor_id', authorizeAccessControll, updateGuarantorStatus);
-    router.put('/update/:guarantor_id', authorizeAccessControll,updateGuarantor);
-    router.delete('/delete/:guarantor_id', authorizeAccessControll,deleteGuarantor);
-    router.put('/delete', authorizeAccessControll,deleteGuarantors);
+    router.post('/create', authenticateToken,addGuarantor);
+    router.get('/all', authenticateToken,getAllGuarantors);
+    router.get('/branch/all', authenticateToken,getAllGuarantors);
+    router.get('/:guarantor_id', authenticateToken,getGuarantorById);
+    router.put('/status/:guarantor_id', authenticateToken, updateGuarantorStatus);
+    router.put('/update/:guarantor_id', authenticateToken,updateGuarantor);
+    router.delete('/delete/:guarantor_id', authenticateToken,deleteGuarantor);
+    router.put('/delete', authenticateToken,deleteGuarantors);
 
   
     return router;

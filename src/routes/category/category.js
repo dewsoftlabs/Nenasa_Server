@@ -15,7 +15,7 @@ module.exports = (config) => {
   const router = express.Router();
 
   router.post('/create', authorizeAccessControll, addCategory);
-  router.get('/all', authorizeAccessControll, getAllCategories);
+  router.get('/all', authenticateToken, getAllCategories);
   router.get('/:categoryId', authorizeAccessControll, getCategoryById);
   // router.put('/status/:categoryId', authorizeAccessControll, updateCategoryStatus);
   router.delete('/delete/:categoryId', authorizeAccessControll, deleteCategory);

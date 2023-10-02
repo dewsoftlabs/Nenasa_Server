@@ -17,7 +17,7 @@ module.exports = (config) => {
 
   //admin only
   router.post('/create', authorizeAccessControll, addBranch);
-  router.get('/all', authorizeAccessControll, getAllBranches);
+  router.get('/all', authenticateToken, getAllBranches);
   router.get('/:branchId', authorizeAccessControll, getBranchById);
   router.put('/status/:branchId', authorizeAccessControll, updateBranchStatus);
   router.delete('/delete/:branchId', authorizeAccessControll, deleteBranch);

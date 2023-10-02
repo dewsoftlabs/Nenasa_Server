@@ -19,15 +19,15 @@ const { authorizeAccessControll } = require('../../middlewares/userAccess');
 module.exports = (config) => {
     const router = express.Router();
   
-    router.post('/create', authorizeAccessControll,addCustomer);
-    router.get('/all', authorizeAccessControll,getAllCustomers);
-    router.get('/branch/all/:branchid', authorizeAccessControll,getAllCustomersbyBranch);
-    router.get('/:customer_id', authorizeAccessControll,getCustomerById);
-    router.put('/status/:customer_id', authorizeAccessControll, updateCustomerStatus);
-    router.put('/update/:customer_id', authorizeAccessControll,updateCustomer);
-    router.put('/delete/:customer_id', authorizeAccessControll,deleteCustomer);
-    router.put('/delete', authorizeAccessControll,deleteCustomers);
-    router.get('/customerDetails/:customer_nic', authorizeAccessControll , getCustomerDetailsByNIC);
+    router.post('/create', authenticateToken,addCustomer);
+    router.get('/all', authenticateToken,getAllCustomers);
+    router.get('/branch/all/:branchid', authenticateToken,getAllCustomersbyBranch);
+    router.get('/:customer_id', authenticateToken,getCustomerById);
+    router.put('/status/:customer_id', authenticateToken, updateCustomerStatus);
+    router.put('/update/:customer_id', authenticateToken,updateCustomer);
+    router.put('/delete/:customer_id', authenticateToken,deleteCustomer);
+    router.put('/delete', authenticateToken,deleteCustomers);
+    router.get('/customerDetails/:customer_nic', authenticateToken , getCustomerDetailsByNIC);
   
     return router;
   };

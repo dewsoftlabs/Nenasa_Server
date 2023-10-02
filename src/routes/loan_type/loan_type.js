@@ -15,7 +15,7 @@ module.exports = (config) => {
     const router = express.Router();
   
     router.post('/create', authorizeAccessControll, addType);
-    router.get('/all', authorizeAccessControll, getAllTypes);
+    router.get('/all', authenticateToken, getAllTypes);
     router.get('/:loantype_id', authorizeAccessControll, getTypeById);
     router.delete('/delete/:loantype_id', authorizeAccessControll, deleteType);
     router.put('/delete', authorizeAccessControll, deleteTypes);

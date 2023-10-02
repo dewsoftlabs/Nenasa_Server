@@ -15,7 +15,7 @@ module.exports = (config) => {
     const router = express.Router();
   
     router.post('/create', authorizeAccessControll, addRoute);
-    router.get('/all', authorizeAccessControll, getAllRoutes);
+    router.get('/all', authenticateToken, getAllRoutes);
     router.get('/:routeId', authorizeAccessControll, getRouteById);
     router.delete('/delete/:routeId', authorizeAccessControll, deleteRoute);
     router.put('/delete', authorizeAccessControll, deleteRoutes);

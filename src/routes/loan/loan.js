@@ -9,18 +9,17 @@ const {
 } = require ('../../mvc/loan/loanController');
 
 const { authenticateToken } = require('../../middlewares/userAuth');
-const { authorizeAccessControll } = require('../../middlewares/userAccess');
 
 module.exports = (config) => {
     const router = express.Router();
   
-    router.post('/create', authorizeAccessControll,addLoan);
-    router.get('/all', authorizeAccessControll,getAllLoans);
-    router.get('/:loan_id', authorizeAccessControll,getLoanById);
-    // router.put('/status/:guarantor_id', authorizeAccessControll, updateGuarantorStatus);
-    // router.put('/update/:guarantor_id', authorizeAccessControll,updateGuarantor);
-    // router.put('/delete/:guarantor_id', authorizeAccessControll,deleteGuarantor);
-    // router.put('/delete', authorizeAccessControll,deleteGuarantors);
+    router.post('/create', authenticateToken,addLoan);
+    router.get('/all', authenticateToken,getAllLoans);
+    router.get('/:loan_id', authenticateToken,getLoanById);
+    // router.put('/status/:guarantor_id', authenticateToken, updateGuarantorStatus);
+    // router.put('/update/:guarantor_id', authenticateToken,updateGuarantor);
+    // router.put('/delete/:guarantor_id', authenticateToken,deleteGuarantor);
+    // router.put('/delete', authenticateToken,deleteGuarantors);
 
   
     return router;
