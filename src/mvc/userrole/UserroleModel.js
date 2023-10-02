@@ -10,7 +10,7 @@ const UserRoleModel = {
   },
 
   getAllUserRoles(callback) {
-    connection.query("SELECT * FROM userrole WHERE is_delete = 0", callback);
+    connection.query("SELECT * FROM userrole WHERE is_delete = 0 AND userrole != 1", callback);
   },
 
   getAllAvailableUserRoles(callback) {
