@@ -105,8 +105,6 @@ const addLoan = (req, res) => {
     });
   };
 
-  //model
-  console.log(customer.customer_nic)
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
     if (error) {
       return handleError(500, "Error fetching data from the database customer_nic");
@@ -132,6 +130,7 @@ const addLoan = (req, res) => {
       });
     } else {
       const customerId = customerResults[0].customer_id;
+      console.log(customerResults[0].customer_id)
       depositAccModel.getdepositAccBycustId(customerId, (error, depositresults) => {
         if (error) {
           return handleError(500, "Error fetching data from the database");
