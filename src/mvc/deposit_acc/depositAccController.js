@@ -28,6 +28,23 @@ const getdepositAccByAccNo = (req, res) => {
     });
 };
 
+const getdepositAccByCustomer = (req, res) => {
+    const { customer_id } = req.params;
+    depositAccModel.getdepositAccByCustomer(customer_id, (error, results) => {
+        if (error) {
+            res.status(500).send({ error: 'Error fetching data from the database' });
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).send({ error: 'Deposit Account not found' });
+            return;
+        }
+
+        res.status(200).send(results);
+    });
+};
+
 const addDepositAcc = (req, res) => {
   const deposit_acc = req.body;
 
@@ -249,4 +266,5 @@ module.exports = {
   getAlldepositAccs,
   getdepositAccByAccNo,
   changeStatus,
+  getdepositAccByCustomer
 };

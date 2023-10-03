@@ -5,6 +5,11 @@ const depositAccModel = {
     connection.query("SELECT * FROM deposit_acc WHERE deposit_acc_no = ? AND is_delete = 0",[deposit_acc_no], callback );
   },
 
+
+  getdepositAccByCustomer(customer_id, callback) {
+    connection.query("SELECT * FROM deposit_acc WHERE customer_id = ? AND is_delete = 0",[customer_id], callback );
+  },
+
   getAlldepositAccs(callback) {
     connection.query("SELECT * FROM deposit_acc WHERE is_delete = 0", callback);
   },
