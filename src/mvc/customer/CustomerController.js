@@ -24,10 +24,20 @@ const getAllCustomers = (req, res) => {
   });
 };
 
+const getcustomersSearch = (req, res) => {
+  const { keyword } = req.params;
+  CustomerModel.getCustomersSearch(keyword, (error, results) => {
+    if (error) {
+      res.status(500).send({ error: "Error fetching data from the database" });
+      return;
+    }
+
+    res.status(200).send(results);
+  });
+};
+
 const getAllCustomersbyBranch = (req, res) => {
   const { branchid } = req.params;
-
-  console.log(branchid);
 
   BranchModel.getBranchById(branchid, (error, customer) => {
     if (error) {
@@ -407,5 +417,6 @@ module.exports = {
   deleteCustomer,
   updateCustomerStatus,
   getCustomerDetailsByNIC,
-  getAllCustomersbyBranch
+  getAllCustomersbyBranch,
+  getcustomersSearch,
 };

@@ -9,7 +9,8 @@ const {
     deleteCustomer,
     updateCustomerStatus,
     getCustomerDetailsByNIC,
-    getAllCustomersbyBranch
+    getAllCustomersbyBranch,
+    getcustomersSearch
 
 } = require ('../../mvc/customer/CustomerController');
 
@@ -21,6 +22,7 @@ module.exports = (config) => {
   
     router.post('/create', authenticateToken,addCustomer);
     router.get('/all', authenticateToken,getAllCustomers);
+    router.get('/search/:keyword', authenticateToken,getcustomersSearch);
     router.get('/branch/all/:branchid', authenticateToken,getAllCustomersbyBranch);
     router.get('/:customer_id', authenticateToken,getCustomerById);
     router.put('/status/:customer_id', authenticateToken, updateCustomerStatus);
