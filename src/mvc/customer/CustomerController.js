@@ -31,7 +31,6 @@ const getcustomersSearch = (req, res) => {
       res.status(500).send({ error: "Error fetching data from the database" });
       return;
     }
-    console.log(results)
 
     res.status(200).send(results);
   });
