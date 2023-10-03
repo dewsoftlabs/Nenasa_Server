@@ -7,7 +7,7 @@ const depositAccModel = {
 
 
   getdepositAccByCustomer(customer_id, callback) {
-    connection.query("SELECT * FROM deposit_acc JOIN deposit_type ON deposit_type.depositType_id = deposit_acc.depositType_id WHERE deposit_acc.customer_id = ? AND deposit_acc.is_delete = 0",[deposit_acc_no], callback );
+    connection.query("SELECT * FROM deposit_acc JOIN deposit_type ON deposit_type.depositType_id = deposit_acc.depositType_id WHERE deposit_acc.customer_id = ? AND deposit_acc.is_delete = 0",[customer_id], callback );
   },
 
   getAlldepositAccs(callback) {
