@@ -16,10 +16,10 @@ const customerModel = {
   getCustomersSearch(keyword, callback) {
     const searchKeyword = `%${keyword}%`; // Assuming you want to perform a partial match
 
-    console.log(searchKeyword)
+    console.log(searchKeyword);
 
     connection.query(
-      "SELECT * FROM customer WHERE is_delete = 0 AND customer_name LIKE ? AND customer_nic LIKE ?",
+      "SELECT * FROM customer WHERE (customer_name LIKE ? OR customer_nic LIKE ?) AND is_delete = 0",
       [searchKeyword, searchKeyword],
       callback
     );
