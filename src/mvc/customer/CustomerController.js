@@ -76,6 +76,19 @@ const getCustomerById = (req, res) => {
   });
 };
 
+const getCustomerByIdAll = (req, res) => {
+  const { customer_id } = req.params;
+
+  CustomerModel.getCustomerByIdAll(customer_id, (error, results) => {
+    if (error) {
+      res.status(500).send({ error: "Error fetching data from the database" });
+      return;
+    }
+
+    res.status(200).send(results);
+  });
+};
+
 const getCustomerDetailsByNIC = (req, res) => {
   const { customer_nic } = req.params;
 
@@ -419,4 +432,5 @@ module.exports = {
   getCustomerDetailsByNIC,
   getAllCustomersbyBranch,
   getcustomersSearch,
+  getCustomerByIdAll,
 };

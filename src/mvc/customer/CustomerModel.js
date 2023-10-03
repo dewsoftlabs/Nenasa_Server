@@ -9,6 +9,14 @@ const customerModel = {
     );
   },
 
+  getCustomerByIdAll(customer_id, callback) {
+    connection.query(
+      "SELECT * FROM customer JOIN branch ON branch.branchid = customer.branchid JOIN route ON route.routeid = customer.routeid WHERE customer.customer_id = ? AND customer.is_delete = 0",
+      [customer_id],
+      callback
+    );
+  },
+
   getAllCustomers(callback) {
     connection.query("SELECT * FROM customer WHERE is_delete = 0", callback);
   },
