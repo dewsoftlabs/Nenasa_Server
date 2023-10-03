@@ -26,12 +26,12 @@ const getAllCustomers = (req, res) => {
 
 const getcustomersSearch = (req, res) => {
   const { keyword } = req.params;
-  console.log(keyword)
   CustomerModel.getCustomersSearch(keyword, (error, results) => {
     if (error) {
       res.status(500).send({ error: "Error fetching data from the database" });
       return;
     }
+    console.log(results)
 
     res.status(200).send(results);
   });
