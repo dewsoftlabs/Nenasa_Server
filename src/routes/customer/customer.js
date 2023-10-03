@@ -27,7 +27,7 @@ module.exports = (config) => {
     router.get('/:customer_id', authenticateToken,getCustomerById);
     router.put('/status/:customer_id', authenticateToken, updateCustomerStatus);
     router.put('/update/:customer_id', authenticateToken,updateCustomer);
-    router.put('/delete/:customer_id', authenticateToken,deleteCustomer);
+    router.delete('/delete/:customer_id', authenticateToken,deleteCustomer);
     router.put('/delete', authenticateToken,deleteCustomers);
     router.get('/customerDetails/:customer_nic', authenticateToken , getCustomerDetailsByNIC);
   
