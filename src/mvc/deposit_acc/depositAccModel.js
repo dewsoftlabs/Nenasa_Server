@@ -5,29 +5,16 @@ const depositAccModel = {
     connection.query("SELECT * FROM deposit_acc WHERE deposit_acc_no = ? AND is_delete = 0",[deposit_acc_no], callback );
   },
 
-
-  getdepositAccByCustomer(customer_id, callback) {
-    connection.query("SELECT * FROM deposit_acc JOIN deposit_type ON deposit_type.depositType_id = deposit_acc.depositType_id WHERE deposit_acc.customer_id = ? AND deposit_acc.is_delete = 0",[customer_id], callback );
-  },
-
   getAlldepositAccs(callback) {
     connection.query("SELECT * FROM deposit_acc WHERE is_delete = 0", callback);
   },
 
   getdepositAccBycustId(customer_id, callback) {
-    connection.query(
-      "SELECT * FROM deposit_acc WHERE customer_id = ? AND is_delete = 0",
-      [customer_id],
-      (error, results) => {
-        if (error) {
-          console.error("Error executing query:", error);
-          callback(error, null);
-          return;
-        }
-  
-        callback(null, results);
-      }
-    );
+    connection.query("SELECT * FROM deposit_acc WHERE customer_id = ? AND is_delete = 0",[customer_id],callback);
+  },
+
+  getdepositAccByNIC(customer_nic, callback) {
+    connection.query("SELECT * FROM customer AS c INNER JOIN deposit_acc AS d ON c.customer_id = d.customer_id WHERE c.customer_nic = ? AND d.is_delete = 0",[customer_nic],callback);
   },
 
   adddepositAcc(customer_id ,deposit_acc, callback) {
@@ -50,14 +37,16 @@ const depositAccModel = {
     });
   },
 
-  adddepositAccDirect(deposit_acc, callback) {
-    const { customer_id , depositType_id , hold_startDate, hold_period , branchid } = deposit_acc;
+  adddepositAccDirect(customer_id, deposit_acc, callback) {
+    const { depositType_id , branchid } = deposit_acc;
     const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const defaultValues = 0;
     const activeValues = 1;
+    const holdPeriod = null;
+    const holdStart = null;
 
     const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , deposit_status ,hold_startDate , hold_period , branchid , trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ?)";
-    const values = [customer_id, depositType_id , activeValues ,hold_startDate, hold_period , branchid , trndate,  defaultValues];
+    const values = [customer_id, depositType_id , activeValues ,holdStart, holdPeriod , branchid , trndate,  defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {
