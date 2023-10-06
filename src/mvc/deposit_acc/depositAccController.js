@@ -1,4 +1,5 @@
 const depositAccModel = require("./depositAccModel");
+const customerModel = require("../customer/CustomerModel");
 
 const getAlldepositAccs = (req, res) => {
     depositAccModel.getAlldepositAccs((error, results) => {
@@ -48,7 +49,7 @@ const getdepositAccByCustomer = (req, res) => {
 const addDepositAcc = (req, res) => {
   const deposit_acc = req.body;
 
-  depositAccModel.getdepositAccBycustId(deposit_acc.customer_id, (error, results) => {
+  depositAccModel.getdepositAccByNIC(deposit_acc.customer_nic, (error, results) => {
     if (error) {
       res.status(500).send({ error: "Error fetching data from the database" });
       return;
@@ -59,21 +60,61 @@ const addDepositAcc = (req, res) => {
       return;
     }
 
-    depositAccModel.adddepositAccDirect(deposit_acc, (error, deposit_acc_no) => {
-      if (error) {
-        res
-          .status(500)
-          .send({ error: "Error fetching data from the database" });
-        return;
-      }
+      customerModel.getCustomerByemail(deposit_acc.customer_email, (error,results) => {
+        if (error) {
+          res
+            .status(500).send({ error: "Error fetching data from the database" });
+          return;
+        }
+  
+        if (results.length > 0) {
+          res.status(409).send({ error: "Email already exists" });
+          return;
+        }
 
-      if (!deposit_acc_no) {
-        res.status(404).send({ error: "Failed to create Deposit Account" });
-        return;
-      }
+          customerModel.getCustomerByphone(deposit_acc.customer_phone , (error,results) => {
 
-      res.status(200).send({ message: "Deposit Account created successfully", deposit_acc_no });
-    });
+            if(error){
+              res.status(500).send({error: "error fetching data from the database" });
+              return;
+            }
+
+            if(results.length > 0){
+              res.status(409).send({ error: "Phone number is already exists" });
+              return;
+            }
+
+              customerModel.addCustomer(deposit_acc, (error,customer_id) => {
+
+                if (error) {
+                  res.status(500).send({ error: "Error fetching data from the database" });
+                  return;
+                }
+    
+                if (!customer_id) {
+                  res.status(500).send({ error: "Failed to create customer" });
+                  return;
+                }
+
+                  depositAccModel.adddepositAccDirect(customer_id, deposit_acc, (error, deposit_acc_no) => {
+
+                    if (error) {
+                      res
+                        .status(500)
+                        .send({ error: "Error fetching data from the database" });
+                      return;
+                    }
+          
+                    if (!deposit_acc_no) {
+                      res.status(404).send({ error: "Failed to create Deposit Account" });
+                      return;
+                    }
+          
+                    res.status(200).send({ message: "Deposit Account created successfully", deposit_acc_no });
+                  });
+              })
+          })
+      })
   });
 };
 
