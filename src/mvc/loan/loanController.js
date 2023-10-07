@@ -37,7 +37,7 @@ const addLoan = (req, res) => {
 
   console.log(loan);
   console.log(customer);
-  console.log('deposit' ,deposit);
+  console.log('deposit', deposit);
   console.log(guarantor);
 
   // Function to handle errors and send responses
@@ -51,10 +51,6 @@ const addLoan = (req, res) => {
 
   if (!customer) {
     return handleError(500, "Failed to customer details not found");
-  }
-
-  if (!deposit) {
-    return handleError(500, "Failed to deposit details not found");
   }
 
   if (!guarantor) {
@@ -128,7 +124,8 @@ const addLoan = (req, res) => {
 
     if (customerResults.length === 0) {
       createNewCustomer(customer, (customer_id) => {
-        createDepositAccount(customer_id, deposit, (deposit_acc_no) => {
+
+        if (deposit.deposithas === false) {
           GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
             if (error) {
               return handleError(500, "Error fetching data from the database guarantor_nic");
@@ -136,13 +133,30 @@ const addLoan = (req, res) => {
 
             if (guarantorResults.length === 0) {
               createNewGuarantor(guarantor, (guarantor_id) => {
-                checkAndCreateLoan(customer_id, deposit_acc_no, guarantor_id);
+                checkAndCreateLoan(customer_id, 0 , guarantor_id);
               });
             } else {
-              checkAndCreateLoan(customer_id, deposit_acc_no, guarantorResults[0].guarantor_id);
+              checkAndCreateLoan(customer_id, 0 , guarantorResults[0].guarantor_id);
             }
           });
-        });
+        } else {
+          createDepositAccount(customer_id, deposit, (deposit_acc_no) => {
+            GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
+              if (error) {
+                return handleError(500, "Error fetching data from the database guarantor_nic");
+              }
+
+              if (guarantorResults.length === 0) {
+                createNewGuarantor(guarantor, (guarantor_id) => {
+                  checkAndCreateLoan(customer_id, deposit_acc_no, guarantor_id);
+                });
+              } else {
+                checkAndCreateLoan(customer_id, deposit_acc_no, guarantorResults[0].guarantor_id);
+              }
+            });
+          });
+        }
+
       });
     } else {
       const customerId = customerResults[0].customer_id;
@@ -151,25 +165,43 @@ const addLoan = (req, res) => {
           return handleError(500, "Error fetching data from the database");
         }
 
-        if (depositresults.length === 0) {
-          return handleError(409, "This customer does not have a Deposit Account");
-        }
+        // if (depositresults.length === 0) {
+        //   return handleError(409, "This customer does not have a Deposit Account");
+        // }
 
-        const depositId = depositresults[0].deposit_acc_no;
+          if (depositresults.length > 0) {
 
-        GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
-          if (error) {
-            return handleError(500, "Error fetching data from the database");
-          }
+            const depositId = depositresults[0].deposit_acc_no;
 
-          if (guarantorResults.length === 0) {
-            createNewGuarantor(guarantor, (guarantor_id) => {
-              checkAndCreateLoan(customerId, depositId, guarantor_id);
+            GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
+              if (error) {
+                return handleError(500, "Error fetching data from the database");
+              }
+    
+              if (guarantorResults.length === 0) {
+                createNewGuarantor(guarantor, (guarantor_id) => {
+                  checkAndCreateLoan(customerId, depositId, guarantor_id);
+                });
+              } else {
+                checkAndCreateLoan(customerId, depositId, guarantorResults[0].guarantor_id);
+              }
             });
-          } else {
-            checkAndCreateLoan(customerId, depositId, guarantorResults[0].guarantor_id);
+          }else{
+            GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
+              if (error) {
+                return handleError(500, "Error fetching data from the database");
+              }
+    
+              if (guarantorResults.length === 0) {
+                createNewGuarantor(guarantor, (guarantor_id) => {
+                  checkAndCreateLoan(customerId, 0 , guarantor_id);
+                });
+              } else {
+                checkAndCreateLoan(customerId, 0 , guarantorResults[0].guarantor_id);
+              }
+            });
           }
-        });
+
       });
     }
   });
