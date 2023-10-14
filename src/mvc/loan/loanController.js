@@ -147,12 +147,17 @@ const addLoan = (req, res) => {
           return handleError(500, "Error creating installments", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
         }
   
-        callback(results);
+        if (typeof callback === 'function') {
+          callback(results);
+        }
       });
     } else {
-      callback(null);
+      if (typeof callback === 'function') {
+        callback(null);
+      }
     }
   };
+  
 
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
     if (error) {
