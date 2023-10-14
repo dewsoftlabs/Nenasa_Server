@@ -121,7 +121,6 @@ const customerModel = {
       defaultValues,
       routeid,
     ];
-    console.log(values);
 
     connection.query(query, values, (error, results) => {
       if (error) {
