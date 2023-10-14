@@ -9,13 +9,13 @@ const InstallementModel = {
     connection.query('SELECT * FROM installement WHERE is_delete = 0', callback);
   },
 
-  addInstallement(installement, callback) {
-    const { collection_id, installment_desc, installement_amount, paid_amount, installement_status, installement_paidDate, userid } = installement;
+  addInstallement(collection_id, installment_desc, installement_amount, userid, callback) {
     const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const defaultValues = 0;
+    const defaultValuesString = '';
 
-    const query = 'INSERT INTO installement (collection_id, installment_desc, installement_amount, paid_amount, installement_status, installement_paidDate, userid, trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    const values = [collection_id, installment_desc, installement_amount, paid_amount, installement_status, installement_paidDate, userid, trndate, defaultValues];
+    const query = 'INSERT INTO installement (collection_id, installment_desc, installement_amount, paid_amount, installement_status, installement_paidDate, userid, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const values = [collection_id, installment_desc, installement_amount, defaultValues, defaultValues, defaultValuesString, userid, defaultValues];
 
     connection.query(query, values, (error, results) => {
       if (error) {

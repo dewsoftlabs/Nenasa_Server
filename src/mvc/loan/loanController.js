@@ -3,6 +3,8 @@ const CustomerModel = require("../customer/CustomerModel");
 const customerModel = require("../customer/CustomerModel");
 const depositAccModel = require("../deposit_acc/depositAccModel");
 const GuarantorModel = require("../guarantor/GuarantorModel");
+const CollectionModal = require("../collection/CollectionModal");
+const InstallementModal = require("../installement/InstallementModal");
 
 const getAllLoans = (req, res) => {
   loanModel.getAllLoans((error, results) => {
@@ -35,11 +37,6 @@ const getLoanById = (req, res) => {
 const addLoan = (req, res) => {
   const { loan, customer, deposit, guarantor, collection } = req.body;
 
-  console.log(loan);
-  console.log(customer);
-  console.log('deposit', deposit);
-  console.log('collection', collection);
-
   // Function to handle errors and send responses
   const handleError = (statusCode, errorMessage) => {
     res.status(statusCode).send({ error: errorMessage });
@@ -55,6 +52,10 @@ const addLoan = (req, res) => {
 
   if (!guarantor) {
     return handleError(500, "Failed to guarantor details not found");
+  }
+
+  if (!collection) {
+    return handleError(500, "Failed to collection details not found");
   }
 
   // Function to create a new customer if not found
@@ -103,7 +104,7 @@ const addLoan = (req, res) => {
   };
 
   // Function to create a new loan
-  const createNewLoan = (customer_id, deposit_acc_no, guarantor_id) => {
+  const createNewLoan = (customer_id, deposit_acc_no, guarantor_id, callback) => {
     loanModel.addLoan(customer_id, deposit_acc_no, guarantor_id, loan, (error, loan_id) => {
       if (error) {
         return handleError(500, "Error fetching data from the database deposit_acc_no");
@@ -113,8 +114,49 @@ const addLoan = (req, res) => {
         return handleError(404, "Failed to create Loan");
       }
 
-      res.status(200).send({ message: "Loan created successfully", loan_id });
+      callback(loan_id);
     });
+  };
+
+  const createNewCollection = (loan_id, branchid, userid, callback) => {
+    CollectionModal.addCollection(loan_id, branchid, userid, (error, collection_id) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database collection");
+      }
+
+      if (!collection_id) {
+        return handleError(404, "Failed to create Collection");
+      }
+
+      callback(collection_id);
+    });
+  };
+
+  const createInstallement = (loan_period, collection, collection_id, installement_amount, userid, callback) => {
+    // Function to handle errors and send responses
+    const handleError = (statusCode, errorMessage) => {
+      callback({ error: errorMessage });
+    };
+
+    if (loan_period === 'day') {
+      // Iterate over the collection array
+      collection.forEach((value) => {
+        InstallementModal.addInstallement(collection_id, value, installement_amount, userid, (error, result) => {
+          if (error) {
+            return handleError(500, "Error fetching data from the database collection");
+          }
+
+          if (!result) {
+            return handleError(404, "Failed to create Collection");
+          }
+
+          // Continue to the next iteration or finish if it's the last one
+          if (collection.indexOf(value) === collection.length - 1) {
+            callback({ message: "Installments created successfully" });
+          }
+        });
+      });
+    }
   };
 
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
@@ -133,10 +175,22 @@ const addLoan = (req, res) => {
 
             if (guarantorResults.length === 0) {
               createNewGuarantor(guarantor, (guarantor_id) => {
-                checkAndCreateLoan(customer_id, 0 , guarantor_id);
+                createNewLoan(customer_id, 0, guarantor_id, (loan_id) => {
+                  createNewCollection(loan_id, customer.branchid, loan.userid, (collection_id) => {
+                    createInstallement(loan.loan_period, collection, collection_id, loan.installments, loan.userid, (collection_id) => {
+                      res.status(200).send({ message: "Loan created successfully", loan_id, collection_id });
+                    });
+                  });
+                });
               });
             } else {
-              checkAndCreateLoan(customer_id, 0 , guarantorResults[0].guarantor_id);
+              createNewLoan(customer_id, 0, guarantorResults[0].guarantor_id, (loan_id) => {
+                createNewCollection(loan_id, customer.branchid, loan.userid, (collection_id) => {
+                  createInstallement(loan.loan_period, collection, collection_id, loan.installments, loan.userid, (collection_id) => {
+                      res.status(200).send({ message: "Loan created successfully", loan_id, collection_id });
+                    });
+                });
+              });
             }
           });
         } else {
@@ -148,10 +202,22 @@ const addLoan = (req, res) => {
 
               if (guarantorResults.length === 0) {
                 createNewGuarantor(guarantor, (guarantor_id) => {
-                  checkAndCreateLoan(customer_id, deposit_acc_no, guarantor_id);
+                  createNewLoan(customer_id, deposit_acc_no, guarantor_id, (loan_id) => {
+                    createNewCollection(loan_id, customer.branchid, loan.userid, (collection_id) => {
+                      createInstallement(loan.loan_period, collection, collection_id, loan.installments, loan.userid, (collection_id) => {
+                      res.status(200).send({ message: "Loan created successfully", loan_id, collection_id });
+                    });
+                    });
+                  });
                 });
               } else {
-                checkAndCreateLoan(customer_id, deposit_acc_no, guarantorResults[0].guarantor_id);
+                createNewLoan(customer_id, deposit_acc_no, guarantorResults[0].guarantor_id, (loan_id) => {
+                  createNewCollection(loan_id, customer.branchid, loan.userid, (collection_id) => {
+                    createInstallement(loan.loan_period, collection, collection_id, loan.installments, loan.userid, (collection_id) => {
+                      res.status(200).send({ message: "Loan created successfully", loan_id, collection_id });
+                    });
+                  });
+                });
               }
             });
           });
@@ -165,65 +231,67 @@ const addLoan = (req, res) => {
           return handleError(500, "Error fetching data from the database");
         }
 
-        // if (depositresults.length === 0) {
-        //   return handleError(409, "This customer does not have a Deposit Account");
-        // }
+        if (depositresults.length > 0) {
 
-          if (depositresults.length > 0) {
+          const depositId = depositresults[0].deposit_acc_no;
 
-            const depositId = depositresults[0].deposit_acc_no;
+          GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
+            if (error) {
+              return handleError(500, "Error fetching data from the database");
+            }
 
-            GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
-              if (error) {
-                return handleError(500, "Error fetching data from the database");
-              }
-    
-              if (guarantorResults.length === 0) {
-                createNewGuarantor(guarantor, (guarantor_id) => {
-                  checkAndCreateLoan(customerId, depositId, guarantor_id);
+            if (guarantorResults.length === 0) {
+              createNewGuarantor(guarantor, (guarantor_id) => {
+                createNewLoan(customerId, depositId, guarantor_id, (loan_id) => {
+                  createNewCollection(loan_id, customer.branchid, loan.userid, (collection_id) => {
+                    createInstallement(loan.loan_period, collection, collection_id, loan.installments, loan.userid, (collection_id) => {
+                      res.status(200).send({ message: "Loan created successfully", loan_id, collection_id });
+                    });
+                  });
                 });
-              } else {
-                checkAndCreateLoan(customerId, depositId, guarantorResults[0].guarantor_id);
-              }
-            });
-          }else{
-            GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
-              if (error) {
-                return handleError(500, "Error fetching data from the database");
-              }
-    
-              if (guarantorResults.length === 0) {
-                createNewGuarantor(guarantor, (guarantor_id) => {
-                  checkAndCreateLoan(customerId, 0 , guarantor_id);
+              });
+            } else {
+              createNewLoan(customerId, depositId, guarantorResults[0].guarantor_id, (loan_id) => {
+                createNewCollection(loan_id, customer.branchid, loan.userid, (collection_id) => {
+                  createInstallement(loan.loan_period, collection, collection_id, loan.installments, loan.userid, (collection_id) => {
+                      res.status(200).send({ message: "Loan created successfully", loan_id, collection_id });
+                    });
                 });
-              } else {
-                checkAndCreateLoan(customerId, 0 , guarantorResults[0].guarantor_id);
-              }
-            });
-          }
+              });
+            }
+          });
+        } else {
+          GuarantorModel.getGuarantorBynic(guarantor.guarantor_nic, (error, guarantorResults) => {
+            if (error) {
+              return handleError(500, "Error fetching data from the database");
+            }
+
+            if (guarantorResults.length === 0) {
+              createNewGuarantor(guarantor, (guarantor_id) => {
+                createNewLoan(customerId, 0, guarantor_id, (loan_id) => {
+                  createNewCollection(loan_id, customer.branchid, loan.userid, (collection_id) => {
+                    createInstallement(loan.loan_period, collection, collection_id, loan.installments, loan.userid, (collection_id) => {
+                      res.status(200).send({ message: "Loan created successfully", loan_id, collection_id });
+                    });
+                  });
+                });
+              });
+            } else {
+              createNewLoan(customerId, 0, guarantorResults[0].guarantor_id, (loan_id) => {
+                createNewCollection(loan_id, customer.branchid, loan.userid, (collection_id) => {
+                  createInstallement(loan.loan_period, collection, collection_id, loan.installments, loan.userid, (collection_id) => {
+                      res.status(200).send({ message: "Loan created successfully", loan_id, collection_id });
+                    });
+                });
+              });
+            }
+          });
+        }
 
       });
     }
   });
-
-  
-
-  // Function to check and create a loan
-  const checkAndCreateLoan = (customer_id, deposit_acc_no, guarantor_id) => {
-    loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
-      if (error) {
-        return handleError(500, "Error fetching data from the database checkAndCreateLoan");
-      }
-
-      if (results.length > 0) {
-        return handleError(409, "This Business Name already has a Loan");
-      }
-
-      createNewLoan(customer_id, deposit_acc_no, guarantor_id);
-    });
-  };
 };
-
 
 const addContinueLoan = (req, res) => {
   const { loan, customer_id, guarantor } = req.body;
@@ -261,7 +329,7 @@ const addContinueLoan = (req, res) => {
   };
 
   // Function to create a new loan
-  const createNewLoan = (customer_id, deposit_acc_no, guarantor_id) => {
+  const createNewLoan = (customer_id, deposit_acc_no, guarantor_id, callback) => {
     loanModel.addLoan(customer_id, deposit_acc_no, guarantor_id, loan, (error, loan_id) => {
       if (error) {
         return handleError(500, "Error fetching data from the database deposit_acc_no");
@@ -272,21 +340,6 @@ const addContinueLoan = (req, res) => {
       }
 
       res.status(200).send({ message: "Loan created successfully", loan_id });
-    });
-  };
-
-  // Function to check and create a loan
-  const checkAndCreateLoan = (customer_id, deposit_acc_no, guarantor_id) => {
-    loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
-      if (error) {
-        return handleError(500, "Error fetching data from the database checkAndCreateLoan");
-      }
-
-      if (results.length > 0) {
-        return handleError(409, "This Business Name already has a Loan");
-      }
-
-      createNewLoan(customer_id, deposit_acc_no, guarantor_id);
     });
   };
 
@@ -320,23 +373,24 @@ const addContinueLoan = (req, res) => {
             return handleError(409, "This Guarantor does not found. Please try again with correct data");
           }
 
-          // checkAndCreateLoan(customer_id, depositId, guarantor.guarantor_id);
+          createNewLoan(customer_id, depositId, guarantor.guarantor_id, (loan_id) => {
+            res.status(200).send({ message: "Loan created successfully", loan_id });
+          });
         });
       } else {
         createNewGuarantor(guarantor, (guarantor_id) => {
-          // checkAndCreateLoan(customer_id, depositId, guarantor_id);
+          createNewLoan(customer_id, depositId, guarantor_id, (loan_id) => {
+            res.status(200).send({ message: "Loan created successfully", loan_id });
+          });
         });
       }
     });
   });
 };
 
-
-
-
 module.exports = {
   addLoan,
   getAllLoans,
   getLoanById,
   addContinueLoan
-}
+};
