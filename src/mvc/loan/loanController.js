@@ -123,7 +123,7 @@ const addLoan = (req, res) => {
 
   // Function to create installments
   const createInstallement = (loan_period, collection, collection_id, installments, userid, callback) => {
-    console.log(collection)
+    console.log(loan_period)
     if (loan_period === "day") {
       let successCount = 0;
       let failCount = 0;
