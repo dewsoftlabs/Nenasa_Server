@@ -61,6 +61,14 @@ const GuarantorModel = {
         connection.query(query, values, callback);
       },
 
+      perma_deleteGuarantor(guarantor_id, callback) {
+        const query = 'DELETE FROM guarantor WHERE guarantor_id = ?';
+        const values = [guarantor_id];
+      
+        connection.query(query, values, callback);
+      },
+      
+
       deleteGuarantors(guarantor_id, callback) {
         if (!Array.isArray(guarantor_id)) {
             guarantorid = [guarantor_id]; // Convert to array if it's a single guarantor ID

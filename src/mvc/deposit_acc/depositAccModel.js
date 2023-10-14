@@ -94,6 +94,14 @@ const depositAccModel = {
 
     connection.query(query, values, callback);
   },
+  
+  perma_deletedepositAcc(deposit_acc_no, callback) {
+    const query = "DELETE FROM deposit_acc WHERE deposit_acc_no = ?";
+    const values = [deposit_acc_no];
+  
+    connection.query(query, values, callback);
+  },
+  
 
   deletedepositAccounts(depositAccIds, callback) {
     if (!Array.isArray(depositAccIds)) {

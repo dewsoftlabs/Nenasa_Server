@@ -43,6 +43,14 @@ const CollectionModel = {
     connection.query(query, values, callback);
   },
 
+  perma_deleteCollection(collection_id, callback) {
+    const query = 'DELETE FROM collection WHERE collection_id = ?';
+    const values = [collection_id];
+  
+    connection.query(query, values, callback);
+  },
+  
+
   updateCollectionStatus(collection_id, status, callback) {
     const query = 'UPDATE collection SET status = ? WHERE collection_id = ?';
     const values = [status, collection_id];

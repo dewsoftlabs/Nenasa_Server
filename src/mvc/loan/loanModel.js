@@ -83,6 +83,14 @@ const loanModel = {
         connection.query(query, values, callback);
       },
 
+      perma_deleteLoan(loan_id, callback) {
+        const query = 'DELETE FROM loan WHERE loan_id = ?';
+        const values = [loan_id];
+      
+        connection.query(query, values, callback);
+      },
+      
+
       deleteLoans(loanIds, callback) {
         if (!Array.isArray(loanIds)) {
           loanIds = [loanIds]; // Convert to array if it's a single user ID

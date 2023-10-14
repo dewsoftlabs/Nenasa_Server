@@ -43,6 +43,14 @@ const InstallementModel = {
     connection.query(query, values, callback);
   },
 
+  perma_deleteInstallement(installement_id, callback) {
+    const query = 'DELETE FROM installement WHERE installement_id = ?';
+    const values = [installement_id];
+  
+    connection.query(query, values, callback);
+  },
+  
+
   updateInstallementStatus(installement_id, installement_status, callback) {
     const query = 'UPDATE installement SET installement_status = ? WHERE installement_id = ?';
     const values = [installement_status, installement_id];

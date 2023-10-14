@@ -171,6 +171,14 @@ const customerModel = {
     connection.query(query, values, callback);
   },
 
+  perma_deleteCustomer(customer_id, callback) {
+    const query = "DELETE FROM customer WHERE customer_id = ?";
+    const values = [customer_id]; // Corrected values array
+  
+    connection.query(query, values, callback);
+  },
+  
+
   deleteCustomers(customer_id, callback) {
     if (!Array.isArray(customer_id)) {
       customerid = [customer_id]; // Convert to array if it's a single customer ID
