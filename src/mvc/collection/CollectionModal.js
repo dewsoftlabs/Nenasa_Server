@@ -9,24 +9,25 @@ const CollectionModel = {
     connection.query('SELECT * FROM collection WHERE is_delete = 0', callback);
   },
 
-  addCollection(loan_id, branchid, userid , callback) {
+  addCollection(loan_id, branchid, userid, callback) {
     const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const defaultValues = 0;
     const activeValues = 1;
-
+  
     const query = 'INSERT INTO collection (loan_id, balance, paid_installements, branchid, userid, status, trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const values = [loan_id, defaultValues, defaultValues, branchid, userid, defaultValues, trndate, defaultValues];
-
+    const values = [loan_id, defaultValues, defaultValues, branchid, userid, activeValues, trndate, defaultValues];
+  
     connection.query(query, values, (error, results) => {
       if (error) {
         callback(error, null);
         return;
       }
-
+  
       const collection_id = results.insertId;
       callback(null, collection_id);
     });
   },
+  
 
   updateCollection(collection, collection_id, callback) {
     const { loan_id, balance, paid_installements, branchid, userid, status } = collection;
