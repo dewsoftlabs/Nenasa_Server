@@ -121,44 +121,44 @@ const addLoan = (req, res) => {
     });
   };
 
-   // Function to create installments
-   const createInstallement = (loan, collection_id, callback) => {
+  // Function to create installments
+  const createInstallement = (loan, collection_id, callback) => {
     if (loan.loan_period === "day") {
-      const tasks = [];
-  
+      const promises = [];
+
       collection.forEach((value) => {
-        tasks.push((cb) => {
+        const promise = new Promise((resolve, reject) => {
           InstallementModal.addInstallement(collection_id, value, loan.installments, loan.userid, (error, installement_id) => {
             if (error) {
-              return handleError(500, "Error creating installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
+              reject(error);
             }
-  
+
             if (!installement_id) {
-              return handleError(500, "Failed to create Installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
+              reject("Failed to create Installment");
             }
-  
-            cb(null, installement_id);
+
+            resolve(installement_id);
           });
         });
+
+        promises.push(promise);
       });
-  
-      async.parallel(tasks, (err, results) => {
-        if (err) {
-          return handleError(500, "Error creating installments", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
-        }
-  
-        if (typeof callback === 'function') {
-          callback(results);
-        }
-      });
-    } else {
-      if (typeof callback === 'function') {
-        callback(null);
-      }
+
+      Promise.all(promises)
+        .then((results) => {
+          // All installment additions are completed
+          callback(null, results);
+        })
+        .catch((error) => {
+          // Handle errors
+          handleError(500, error, loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
+          callback(error); // Notify the caller about the error
+        });
     }
   };
-  
-  
+
+
+
 
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
     if (error) {
