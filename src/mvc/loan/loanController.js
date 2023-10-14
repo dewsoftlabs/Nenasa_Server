@@ -338,4 +338,5 @@ module.exports = {
   addLoan,
   getAllLoans,
   getLoanById,
+  addContinueLoan
 }
