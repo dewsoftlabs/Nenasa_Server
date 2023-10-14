@@ -156,7 +156,7 @@ const addLoan = (req, res) => {
       let failCount = 0;
   
       collection.forEach((value) => {
-        const desc = value.startDate + '-' + value.endDate;
+        const desc = value.startDate + ',' + value.endDate;
 
         InstallementModal.addInstallement(collection_id, desc, installments, userid, (error, installement_id) => {
           if (error) {
@@ -185,7 +185,7 @@ const addLoan = (req, res) => {
       let failCount = 0;
   
       collection.forEach((value) => {
-        const desc = value.startDate + '-' + value.endDate + '|' + value.monthAndYear;
+        const desc = value.startDate + ',' + value.endDate + '|' + value.monthAndYear;
 
         InstallementModal.addInstallement(collection_id, desc, installments, userid, (error, installement_id) => {
           if (error) {
