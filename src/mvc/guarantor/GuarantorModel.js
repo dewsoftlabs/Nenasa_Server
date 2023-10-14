@@ -21,6 +21,10 @@ const GuarantorModel = {
       getGuarantorBynic(guarantor_nic, callback) {
         connection.query('SELECT * FROM guarantor WHERE guarantor_nic = ? AND is_delete = 0', [guarantor_nic], callback);
       },
+      
+      getGuarantorByGuarantor_id(guarantor_id, callback) {
+        connection.query('SELECT * FROM guarantor WHERE guarantor_id = ? AND is_delete = 0', [guarantor_id], callback);
+      },
 
     addGuarantor(guarantor, callback) {
         const { guarantor_name,guarantor_phone,guarantor_email , guarantor_address , guarantor_nic ,branchid } = guarantor;

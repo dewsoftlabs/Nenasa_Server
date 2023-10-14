@@ -35,11 +35,6 @@ const getLoanById = (req, res) => {
 const addLoan = (req, res) => {
   const { loan, customer, deposit, guarantor } = req.body;
 
-  console.log(loan);
-  console.log(customer);
-  console.log('deposit' ,deposit);
-  console.log(guarantor);
-
   // Function to handle errors and send responses
   const handleError = (statusCode, errorMessage) => {
     res.status(statusCode).send({ error: errorMessage });
@@ -174,6 +169,8 @@ const addLoan = (req, res) => {
     }
   });
 
+  
+
   // Function to check and create a loan
   const checkAndCreateLoan = (customer_id, deposit_acc_no, guarantor_id) => {
     loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
@@ -189,6 +186,115 @@ const addLoan = (req, res) => {
     });
   };
 };
+
+
+const addContinueLoan = (req, res) => {
+  const { loan, customer_id, guarantor } = req.body;
+
+  // Function to handle errors and send responses
+  const handleError = (statusCode, errorMessage) => {
+    res.status(statusCode).send({ error: errorMessage });
+  };
+
+  if (!loan) {
+    return handleError(500, "Failed to loan details not found");
+  }
+
+  if (!customer_id) {
+    return handleError(500, "Failed to customer details not found");
+  }
+
+  if (!guarantor) {
+    return handleError(500, "Failed to guarantor details not found");
+  }
+
+  // Function to create a new guarantor if not found
+  const createNewGuarantor = (guarantor, callback) => {
+    GuarantorModel.addGuarantor(guarantor, (error, guarantor_id) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database guarantor");
+      }
+
+      if (!guarantor_id) {
+        return handleError(500, "Failed to create Guarantor");
+      }
+
+      callback(guarantor_id);
+    });
+  };
+
+  // Function to create a new loan
+  const createNewLoan = (customer_id, deposit_acc_no, guarantor_id) => {
+    loanModel.addLoan(customer_id, deposit_acc_no, guarantor_id, loan, (error, loan_id) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database deposit_acc_no");
+      }
+
+      if (!loan_id) {
+        return handleError(404, "Failed to create Loan");
+      }
+
+      res.status(200).send({ message: "Loan created successfully", loan_id });
+    });
+  };
+
+  // Function to check and create a loan
+  const checkAndCreateLoan = (customer_id, deposit_acc_no, guarantor_id) => {
+    loanModel.getloanBybusinessName(loan.business_name, (error, results) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database checkAndCreateLoan");
+      }
+
+      if (results.length > 0) {
+        return handleError(409, "This Business Name already has a Loan");
+      }
+
+      createNewLoan(customer_id, deposit_acc_no, guarantor_id);
+    });
+  };
+
+  CustomerModel.getCustomerByCustomer_id(customer_id, (error, customerResults) => {
+    if (error) {
+      return handleError(500, "Error fetching data from the database customer_nic");
+    }
+
+    if (customerResults.length === 0) {
+      return handleError(409, "This customer does not found");
+    }
+
+    depositAccModel.getdepositAccBycustId(customer_id, (error, depositresults) => {
+      if (error) {
+        return handleError(500, "Error fetching data from the database");
+      }
+
+      if (depositresults.length === 0) {
+        return handleError(409, "This customer does not have a Deposit Account");
+      }
+
+      const depositId = depositresults[0].deposit_acc_no;
+
+      if (guarantor.guarantor_id && guarantor.guarantor_id !== "") {
+        GuarantorModel.getGuarantorByGuarantor_id(guarantor.guarantor_id, (error, guarantorResults) => {
+          if (error) {
+            return handleError(500, "Error fetching data from the database");
+          }
+
+          if (guarantorResults.length === 0) {
+            return handleError(409, "This Guarantor does not found. Please try again with correct data");
+          }
+
+          checkAndCreateLoan(customer_id, depositId, guarantor.guarantor_id);
+        });
+      } else {
+        createNewGuarantor(guarantor, (guarantor_id) => {
+          checkAndCreateLoan(customer_id, depositId, guarantor_id);
+        });
+      }
+    });
+  });
+};
+
+
 
 
 module.exports = {

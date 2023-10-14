@@ -23,8 +23,8 @@ const depositAccModel = {
     const defaultValues = 0;
     const activeValues = 1;
 
-    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , deposit_status ,hold_startDate , hold_period , branchid , trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , ?)";
-    const values = [customer_id, depositType_id , activeValues ,hold_startDate, hold_period , branchid , trndate,  defaultValues];
+    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , deposit_status, depositbalance ,hold_startDate , hold_period , branchid , lastUpdate, trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , NOW() , NOW(), 0)";
+    const values = [customer_id, depositType_id , activeValues , defaultValues ,hold_startDate, hold_period , branchid ];
 
     connection.query(query, values, (error, results) => {
       if (error) {

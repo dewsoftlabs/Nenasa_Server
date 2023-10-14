@@ -62,6 +62,14 @@ const customerModel = {
     );
   },
 
+  getCustomerByCustomer_id(customer_id, callback) {
+    connection.query(
+      "SELECT * FROM customer WHERE customer_id = ? AND is_delete = 0",
+      [customer_id],
+      callback
+    );
+  },
+
   getCustomerDetailsByID(customer_id, callback) {
     const query = `
             SELECT
