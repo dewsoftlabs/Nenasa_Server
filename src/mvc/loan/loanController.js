@@ -123,7 +123,7 @@ const addLoan = (req, res) => {
 
   // Function to create installments
   const createInstallement = (loan_period, collection, collection_id, installments, userid, callback) => {
-    console.log(loan_period)
+
     if (loan_period == 1) {
       let successCount = 0;
       let failCount = 0;
@@ -143,14 +143,71 @@ const addLoan = (req, res) => {
             successCount++;
           }
   
-          console.log(value)
+
           // Check if all iterations are completed
           if (successCount + failCount === collection.length) {
             // Call the callback with success and fail counts
           }
         });
       });
-      console.log(successCount)
+      callback(null, { successCount });
+    }else if (loan_period == 2) {
+      let successCount = 0;
+      let failCount = 0;
+  
+      collection.forEach((value) => {
+        const desc = value.startDate + '-' + value.endDate;
+
+        InstallementModal.addInstallement(collection_id, desc, installments, userid, (error, installement_id) => {
+          if (error) {
+            // Increment the fail count
+            failCount++;
+            handleError(500, "Error creating installment");
+          } else if (!installement_id) {
+            // Increment the fail count
+            failCount++;
+            handleError(500, "Failed to create Installment");
+          } else {
+            // Increment the success count
+            successCount++;
+          }
+  
+
+          // Check if all iterations are completed
+          if (successCount + failCount === collection.length) {
+            // Call the callback with success and fail counts
+          }
+        });
+      });
+      callback(null, { successCount });
+    }else if (loan_period == 3) {
+      let successCount = 0;
+      let failCount = 0;
+  
+      collection.forEach((value) => {
+        const desc = value.startDate + '-' + value.endDate + '|' + value.monthAndYear;
+
+        InstallementModal.addInstallement(collection_id, desc, installments, userid, (error, installement_id) => {
+          if (error) {
+            // Increment the fail count
+            failCount++;
+            handleError(500, "Error creating installment");
+          } else if (!installement_id) {
+            // Increment the fail count
+            failCount++;
+            handleError(500, "Failed to create Installment");
+          } else {
+            // Increment the success count
+            successCount++;
+          }
+  
+
+          // Check if all iterations are completed
+          if (successCount + failCount === collection.length) {
+            // Call the callback with success and fail counts
+          }
+        });
+      });
       callback(null, { successCount });
     }
   };
