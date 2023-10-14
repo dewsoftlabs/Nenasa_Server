@@ -128,7 +128,7 @@ const addLoan = (req, res) => {
   
       collection.forEach((value) => {
         tasks.push((cb) => {
-          InstallementModal.addInstallment(collection_id, value, loan.installments, loan.userid, (error, installement_id) => {
+          InstallementModal.addInstallement(collection_id, value, loan.installments, loan.userid, (error, installement_id) => {
             if (error) {
               return handleError(500, "Error creating installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
             }
