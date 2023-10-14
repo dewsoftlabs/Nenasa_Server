@@ -35,7 +35,6 @@ const loanModel = {
           total_payamount,
         } = loan;
       
-        const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const defaultValues = 0;
         const activeValues = 1;
       
@@ -44,7 +43,7 @@ const loanModel = {
                       userid, loan_amount, rate, loan_category, loantype_id, terms_id, installments, 
                       total_payable, startDate, endDate, document_charge, service_charge, hold_period, 
                       deposit_amount, total_payamount, status, trndate, is_delete) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)
                       `;
       
         const values = [
@@ -69,7 +68,6 @@ const loanModel = {
           deposit_amount,
           total_payamount,
           activeValues, // status
-          trndate,
           defaultValues, // is_delete
         ];
       
