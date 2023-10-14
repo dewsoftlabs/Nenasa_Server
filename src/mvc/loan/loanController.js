@@ -124,41 +124,34 @@ const addLoan = (req, res) => {
   // Function to create installments
   const createInstallement = (loan, collection_id, callback) => {
     if (loan.loan_period === "day") {
-      const promises = [];
-
+      let successCount = 0;
+      let failCount = 0;
+  
       collection.forEach((value) => {
-        const promise = new Promise((resolve, reject) => {
-          InstallementModal.addInstallement(collection_id, value, loan.installments, loan.userid, (error, installement_id) => {
-            if (error) {
-              reject(error);
-            }
-
-            if (!installement_id) {
-              reject("Failed to create Installment");
-            }
-
-            resolve(installement_id);
-          });
+        InstallementModal.addInstallement(collection_id, value, loan.installments, loan.userid, (error, installement_id) => {
+          if (error) {
+            // Increment the fail count
+            failCount++;
+            handleError(500, "Error creating installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
+          } else if (!installement_id) {
+            // Increment the fail count
+            failCount++;
+            handleError(500, "Failed to create Installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
+          } else {
+            // Increment the success count
+            successCount++;
+          }
+  
+          // Check if all iterations are completed
+          if (successCount + failCount === collection.length) {
+            // Call the callback with success and fail counts
+            callback(null, { successCount, failCount });
+          }
         });
-
-        promises.push(promise);
       });
-
-      Promise.all(promises)
-        .then((results) => {
-          // All installment additions are completed
-          callback(null, results);
-        })
-        .catch((error) => {
-          // Handle errors
-          handleError(500, error, loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
-          callback(error); // Notify the caller about the error
-        });
     }
   };
-
-
-
+  
 
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
     if (error) {
