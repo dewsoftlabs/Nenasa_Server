@@ -33,12 +33,12 @@ const getLoanById = (req, res) => {
 };
 
 const addLoan = (req, res) => {
-  const { loan, customer, deposit, guarantor } = req.body;
+  const { loan, customer, deposit, guarantor, collection } = req.body;
 
   console.log(loan);
   console.log(customer);
   console.log('deposit', deposit);
-  console.log(guarantor);
+  console.log('collection', collection);
 
   // Function to handle errors and send responses
   const handleError = (statusCode, errorMessage) => {
@@ -320,11 +320,11 @@ const addContinueLoan = (req, res) => {
             return handleError(409, "This Guarantor does not found. Please try again with correct data");
           }
 
-          checkAndCreateLoan(customer_id, depositId, guarantor.guarantor_id);
+          // checkAndCreateLoan(customer_id, depositId, guarantor.guarantor_id);
         });
       } else {
         createNewGuarantor(guarantor, (guarantor_id) => {
-          checkAndCreateLoan(customer_id, depositId, guarantor_id);
+          // checkAndCreateLoan(customer_id, depositId, guarantor_id);
         });
       }
     });

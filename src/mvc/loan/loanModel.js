@@ -18,7 +18,7 @@ const loanModel = {
 
         const { business_name, business_type, userid, loan_amount,
              rate, loan_category, loantype_id, terms_id, installments, total_payable, startDate, endDate, 
-             document_charge, service_charge, hold_period, deposit_amount
+             document_charge, service_charge, hold_period, deposit_amount, total_payamount
             } = loan;
 
         const trndate = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -29,13 +29,13 @@ const loanModel = {
                         (customer_id, deposit_acc_no, guarantor_id, business_name, business_type, 
                         userid, loan_amount, rate, loan_category, loantype_id, terms_id, installments, 
                         total_payable, startDate, endDate, document_charge, service_charge, hold_period, 
-                        deposit_amount, status ,trndate, is_delete) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        deposit_amount, total_payamount, status ,trndate, is_delete) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         `;
 
         const values = [customer_id, deposit_acc_no, guarantor_id, business_name, business_type, userid, loan_amount,
              rate, loan_category, loantype_id, terms_id, installments, total_payable, startDate, endDate, 
-             document_charge, service_charge, hold_period, deposit_amount,activeValues
+             document_charge, service_charge, total_payamount, hold_period, deposit_amount,activeValues
             ,trndate, defaultValues];
     
         connection.query(query, values, (error, results) => {

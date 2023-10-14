@@ -17,25 +17,40 @@ const depositAccModel = {
     connection.query("SELECT * FROM customer AS c INNER JOIN deposit_acc AS d ON c.customer_id = d.customer_id WHERE c.customer_nic = ? AND d.is_delete = 0",[customer_nic],callback);
   },
 
-  adddepositAcc(customer_id ,deposit_acc, callback) {
-    const { depositType_id , hold_startDate, hold_period , branchid } = deposit_acc;
+  adddepositAcc(customer_id, deposit_acc, callback) {
+    const {
+      depositType_id,
+      hold_startDate,
+      hold_endDate,
+      branchid
+    } = deposit_acc;
     const trndate = new Date().toISOString().slice(0, 19).replace("T", " ");
     const defaultValues = 0;
     const activeValues = 1;
-
-    const query = "INSERT INTO deposit_acc ( customer_id , depositType_id , deposit_status, depositbalance ,hold_startDate , hold_period , branchid , lastUpdate, trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ? , NOW() , NOW(), 0)";
-    const values = [customer_id, depositType_id , activeValues , defaultValues ,hold_startDate, hold_period , branchid ];
-
+  
+    const query =
+      "INSERT INTO deposit_acc (customer_id, depositType_id, deposit_status, depositbalance, hold_startDate, hold_endDate, branchid, lastUpdate, trndate, is_delete) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), 0)";
+    const values = [
+      customer_id,
+      depositType_id,
+      defaultValues,
+      defaultValues,
+      hold_startDate,
+      hold_endDate,
+      branchid
+    ];
+  
     connection.query(query, values, (error, results) => {
       if (error) {
         callback(error, null);
         return;
       }
-
+  
       const depositAccId = results.insertId;
       callback(null, depositAccId);
     });
   },
+  
 
   adddepositAccDirect(customer_id, deposit_acc, callback) {
     const { depositType_id , branchid } = deposit_acc;
