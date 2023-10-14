@@ -128,16 +128,16 @@ const addLoan = (req, res) => {
   
       collection.forEach((value) => {
         tasks.push((cb) => {
-          InstallementModal.addInstallement(collection_id, value, loan.installments, loan.userid, (error, result) => {
+          InstallementModal.addInstallment(collection_id, value, loan.installments, loan.userid, (error, installement_id) => {
             if (error) {
               return handleError(500, "Error creating installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
             }
   
-            if (!result) {
+            if (!installement_id) {
               return handleError(500, "Failed to create Installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
             }
   
-            cb(null, result);
+            cb(null, installement_id);
           });
         });
       });
@@ -157,6 +157,7 @@ const addLoan = (req, res) => {
       }
     }
   };
+  
   
 
   CustomerModel.getCustomerBynic(customer.customer_nic, (error, customerResults) => {
