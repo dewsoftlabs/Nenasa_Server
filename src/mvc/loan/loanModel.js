@@ -73,6 +73,7 @@ const loanModel = {
       
         connection.query(query, values, (error, results) => {
           if (error) {
+            console.error(error);
             callback(error, null);
             return;
           }
