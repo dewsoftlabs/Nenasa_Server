@@ -145,7 +145,7 @@ const addLoan = (req, res) => {
           // Check if all iterations are completed
           if (successCount + failCount === collection.length) {
             // Call the callback with success and fail counts
-            callback(null, { successCount, failCount });
+            callback(null, { successCount });
           }
         });
       });
