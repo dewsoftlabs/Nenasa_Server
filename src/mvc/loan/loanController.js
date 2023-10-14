@@ -122,21 +122,22 @@ const addLoan = (req, res) => {
   };
 
   // Function to create installments
-  const createInstallement = (loan, collection_id, callback) => {
-    if (loan.loan_period === "day") {
+  const createInstallement = (loan_period, collection, collection_id, installments, userid, callback) => {
+    console.log(collection)
+    if (loan_period === "day") {
       let successCount = 0;
       let failCount = 0;
   
       collection.forEach((value) => {
-        InstallementModal.addInstallement(collection_id, value, loan.installments, loan.userid, (error, installement_id) => {
+        InstallementModal.addInstallement(collection_id, value, installments, userid, (error, installement_id) => {
           if (error) {
             // Increment the fail count
             failCount++;
-            handleError(500, "Error creating installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
+            handleError(500, "Error creating installment");
           } else if (!installement_id) {
             // Increment the fail count
             failCount++;
-            handleError(500, "Failed to create Installment", loan.customer_id, loan.deposit_acc_no, loan.guarantor_id, loan.loan_id, collection_id);
+            handleError(500, "Failed to create Installment");
           } else {
             // Increment the success count
             successCount++;
